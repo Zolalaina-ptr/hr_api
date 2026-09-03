@@ -108,6 +108,20 @@ Route::middleware('auth:sanctum')->group(function () {
         Route::delete('/attendances/{attendance}', [AttendanceController::class, 'destroy']);
     });
 
+    // Phase 7: Evaluations routes
+    Route::middleware('permission:view evaluations|manage evaluations')->group(function () {
+        Route::get('/evaluations', [\App\Http\Controllers\Api\EvaluationController::class, 'index']);
+        Route::get('/evaluations/upcoming', [\App\Http\Controllers\Api\EvaluationController::class, 'upcoming']);
+        Route::get('/evaluations/employee/{employee}', [\App\Http\Controllers\Api\EvaluationController::class, 'employee']);
+        Route::get('/evaluations/{evaluation}', [\App\Http\Controllers\Api\EvaluationController::class, 'show']);
+    });
+    Route::middleware('permission:create evaluations')->post('/evaluations', [\App\Http\Controllers\Api\EvaluationController::class, 'store']);
+    Route::middleware('permission:update evaluations|manage evaluations')->group(function () {
+        Route::put('/evaluations/{evaluation}', [\App\Http\Controllers\Api\EvaluationController::class, 'update']);
+        Route::patch('/evaluations/{evaluation}/validate', [\App\Http\Controllers\Api\EvaluationController::class, 'validateEvaluation']);
+    });
+    Route::middleware('permission:delete evaluations')->delete('/evaluations/{evaluation}', [\App\Http\Controllers\Api\EvaluationController::class, 'destroy']);
+
     // Phase 6: Leave routes
     Route::middleware('permission:view leaves|manage leaves')->group(function () {
         Route::get('/leaves', [LeaveController::class, 'index']);
