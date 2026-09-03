@@ -108,6 +108,15 @@ Route::middleware('auth:sanctum')->group(function () {
         Route::delete('/attendances/{attendance}', [AttendanceController::class, 'destroy']);
     });
 
+    // Phase 9: Notifications
+    Route::prefix('notifications')->group(function () {
+        Route::get('/', [\App\Http\Controllers\Api\NotificationController::class, 'index']);
+        Route::get('/unread', [\App\Http\Controllers\Api\NotificationController::class, 'unread']);
+        Route::patch('/read-all', [\App\Http\Controllers\Api\NotificationController::class, 'markAllRead']);
+        Route::patch('/{notification}/read', [\App\Http\Controllers\Api\NotificationController::class, 'markAsRead']);
+        Route::delete('/{notification}', [\App\Http\Controllers\Api\NotificationController::class, 'destroy']);
+    });
+
     // Phase 8: Contracts and payroll routes
     Route::middleware('permission:view contracts|manage contracts')->group(function () { Route::get('/contracts',[\App\Http\Controllers\Api\ContractController::class,'index']); Route::get('/contracts/expiring',[\App\Http\Controllers\Api\ContractController::class,'expiring']); Route::get('/contracts/employee/{employee}',[\App\Http\Controllers\Api\ContractController::class,'employee']); Route::get('/contracts/{contract}',[\App\Http\Controllers\Api\ContractController::class,'show']); });
     Route::middleware('permission:create contracts')->post('/contracts',[\App\Http\Controllers\Api\ContractController::class,'store']);
