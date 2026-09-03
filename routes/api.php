@@ -108,6 +108,14 @@ Route::middleware('auth:sanctum')->group(function () {
         Route::delete('/attendances/{attendance}', [AttendanceController::class, 'destroy']);
     });
 
+    // Phase 8: Contracts and payroll routes
+    Route::middleware('permission:view contracts|manage contracts')->group(function () { Route::get('/contracts',[\App\Http\Controllers\Api\ContractController::class,'index']); Route::get('/contracts/expiring',[\App\Http\Controllers\Api\ContractController::class,'expiring']); Route::get('/contracts/employee/{employee}',[\App\Http\Controllers\Api\ContractController::class,'employee']); Route::get('/contracts/{contract}',[\App\Http\Controllers\Api\ContractController::class,'show']); });
+    Route::middleware('permission:create contracts')->post('/contracts',[\App\Http\Controllers\Api\ContractController::class,'store']);
+    Route::middleware('permission:update contracts|manage contracts')->group(function(){Route::put('/contracts/{contract}',[\App\Http\Controllers\Api\ContractController::class,'update']);Route::delete('/contracts/{contract}',[\App\Http\Controllers\Api\ContractController::class,'destroy']);});
+    Route::middleware('permission:view payroll|manage payroll')->group(function(){Route::get('/payrolls',[\App\Http\Controllers\Api\PayrollController::class,'index']);Route::get('/payrolls/employee/{employee}',[\App\Http\Controllers\Api\PayrollController::class,'employee']);Route::get('/payrolls/{payroll}',[\App\Http\Controllers\Api\PayrollController::class,'show']);});
+    Route::middleware('permission:create payroll')->post('/payrolls',[\App\Http\Controllers\Api\PayrollController::class,'store']);
+    Route::middleware('permission:update payroll|manage payroll')->group(function(){Route::patch('/payrolls/{payroll}/validate',[\App\Http\Controllers\Api\PayrollController::class,'validatePayroll']);Route::patch('/payrolls/{payroll}/pay',[\App\Http\Controllers\Api\PayrollController::class,'pay']);});
+
     // Phase 7: Evaluations routes
     Route::middleware('permission:view evaluations|manage evaluations')->group(function () {
         Route::get('/evaluations', [\App\Http\Controllers\Api\EvaluationController::class, 'index']);

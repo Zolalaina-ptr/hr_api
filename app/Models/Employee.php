@@ -117,4 +117,14 @@ class Employee extends Model
     {
         return $this->hasMany(Evaluation::class);
     }
+
+    public function contracts(): HasMany
+    {
+        return $this->hasMany(Contract::class);
+    }
+
+    public function payrolls(): HasMany
+    {
+        return $this->hasMany(Payroll::class);
+    }
 }

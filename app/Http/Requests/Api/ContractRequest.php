@@ -1,0 +1,3 @@
+<?php
+namespace App\Http\Requests\Api; use Illuminate\Foundation\Http\FormRequest;
+class ContractRequest extends FormRequest {public function authorize():bool{return true;} public function rules():array{return ['employee_id'=>'required|exists:employees,id','type'=>'required|in:cdi,cdd,internship,apprenticeship','start_date'=>'required|date','end_date'=>'nullable|date|after_or_equal:start_date','trial_period_days'=>'nullable|integer|min:0','gross_annual_salary'=>'required|numeric|min:0','fixed_bonus'=>'nullable|numeric|min:0','variable_bonus'=>'nullable|numeric|min:0','benefits'=>'nullable|array','status'=>'nullable|in:active,terminated,completed'];}}

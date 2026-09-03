@@ -1,0 +1,3 @@
+<?php
+namespace App\Models; use Illuminate\Database\Eloquent\Model; use Illuminate\Database\Eloquent\Relations\BelongsTo;
+class Contract extends Model { protected $fillable=['employee_id','type','start_date','end_date','trial_period_days','gross_annual_salary','fixed_bonus','variable_bonus','benefits','status','termination_reason','termination_date','signed_at']; protected $casts=['start_date'=>'date','end_date'=>'date','termination_date'=>'date','signed_at'=>'datetime','benefits'=>'array','gross_annual_salary'=>'decimal:2']; public function employee(): BelongsTo{return $this->belongsTo(Employee::class);} }

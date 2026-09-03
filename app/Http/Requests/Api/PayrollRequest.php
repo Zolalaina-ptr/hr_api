@@ -1,0 +1,3 @@
+<?php
+namespace App\Http\Requests\Api; use Illuminate\Foundation\Http\FormRequest;
+class PayrollRequest extends FormRequest {public function authorize():bool{return true;} public function rules():array{return ['employee_id'=>'required|exists:employees,id','period_month'=>'required|integer|between:1,12','period_year'=>'required|integer|min:2000|max:2100','overtime_pay'=>'nullable|numeric|min:0','bonuses'=>'nullable|numeric|min:0','benefits_in_kind'=>'nullable|numeric|min:0'];}}

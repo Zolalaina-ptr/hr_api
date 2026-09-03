@@ -23,6 +23,8 @@ class PermissionSeeder extends Seeder
             'payroll',
             'leaves',
             'evaluations',
+            'contracts',
+            'payroll',
         ];
 
         $actions = ['view', 'create', 'update', 'delete'];
