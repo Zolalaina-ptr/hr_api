@@ -19,6 +19,7 @@ return Application::configure(basePath: dirname(__DIR__))
         RateLimiter::for('auth', fn (Request $request) => Limit::perMinute(5)->by($request->ip()));
         RateLimiter::for('api', fn (Request $request) => Limit::perMinute(60)->by($request->user()?->id ?: $request->ip()));
         $middleware->append(HandleCors::class);
+        $middleware->append(\App\Http\Middleware\SecurityHeaders::class);
         $middleware->alias([
             'role' => \Spatie\Permission\Middleware\RoleMiddleware::class,
             'permission' => \Spatie\Permission\Middleware\PermissionMiddleware::class,
