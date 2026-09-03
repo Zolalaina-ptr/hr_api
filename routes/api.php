@@ -108,6 +108,14 @@ Route::middleware('auth:sanctum')->group(function () {
         Route::delete('/attendances/{attendance}', [AttendanceController::class, 'destroy']);
     });
 
+    // Phase 10: Dashboard and reporting
+    Route::prefix('dashboard')->group(function () {
+        Route::get('/statistics', [\App\Http\Controllers\Api\DashboardController::class, 'statistics']);
+        Route::get('/headcount', [\App\Http\Controllers\Api\DashboardController::class, 'headcount']);
+        Route::get('/attendance', [\App\Http\Controllers\Api\DashboardController::class, 'attendance']);
+        Route::get('/demographics', [\App\Http\Controllers\Api\DashboardController::class, 'demographics']);
+    });
+
     // Phase 9: Notifications
     Route::prefix('notifications')->group(function () {
         Route::get('/', [\App\Http\Controllers\Api\NotificationController::class, 'index']);
