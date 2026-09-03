@@ -1,0 +1,51 @@
+<?php
+
+namespace App\Rules;
+
+use Illuminate\Contracts\Validation\Rule;
+use Carbon\Carbon;
+use App\Models\LeaveBalance;
+
+class ValidLeaveBalance implements Rule
+{
+    protected $employeeId;
+    protected $leaveTypeId;
+    protected $startDate;
+    protected $endDate;
+
+    public function __construct(int $employeeId, int $leaveTypeId, $startDate, $endDate)
+    {
+        $this->employeeId = $employeeId;
+        $this->leaveTypeId = $leaveTypeId;
+        $this->startDate = $startDate;
+        $this->endDate = $endDate;
+    }
+
+    public function passes($attribute, $value)
+    {
+        return $this->hasSufficientBalance();
+    }
+
+    public function fails($attribute, $value)
+    {
+        return !$this->hasSufficientBalance();
+    }
+
+    private function hasSufficientBalance(): bool
+    {
+        $duration = $this->calculateDays($this->startDate, $this->endDate);
+        $balance = LeaveBalance::where('employee_id', $this->employeeId)
+            ->where('leave_type_id', $this->leaveTypeId)
+            ->where('year', date('Y'))
+            ->first();
+
+        return $balance && $balance->remaining_days >= $duration;
+    }
+
+    private function calculateDays(string $startDate, string $endDate): float
+    {
+        $start = Carbon::parse($startDate);
+        $end = Carbon::parse($endDate);
+        return $start->diffInDays($end) + 1; // include both days
+    }
+}
