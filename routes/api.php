@@ -3,6 +3,7 @@
 use App\Http\Controllers\Api\AttendanceController;
 use App\Http\Controllers\Api\AuthController;
 use App\Http\Controllers\Api\DepartmentController;
+use App\Http\Controllers\Api\EmployeeController;
 use App\Http\Controllers\Api\LeaveController;
 use App\Http\Controllers\Api\PositionController;
 use Illuminate\Support\Facades\Route;
@@ -81,6 +82,25 @@ Route::middleware(['auth:sanctum', 'throttle:api'])->group(function () {
 
     Route::middleware('permission:delete positions')->group(function () {
         Route::delete('/positions/{position}', [PositionController::class, 'destroy']);
+    });
+
+    // Phase 11: Employees routes
+    Route::middleware('permission:view employees')->group(function () {
+        Route::get('/employees', [EmployeeController::class, 'index']);
+        Route::get('/employees/{employee}', [EmployeeController::class, 'show']);
+        Route::get('/employees/{employee}/history', [EmployeeController::class, 'history']);
+    });
+
+    Route::middleware('permission:create employees')->group(function () {
+        Route::post('/employees', [EmployeeController::class, 'store']);
+    });
+
+    Route::middleware('permission:update employees')->group(function () {
+        Route::put('/employees/{employee}', [EmployeeController::class, 'update']);
+    });
+
+    Route::middleware('permission:delete employees')->group(function () {
+        Route::delete('/employees/{employee}', [EmployeeController::class, 'destroy']);
     });
 
     // Phase 5: Attendance routes
