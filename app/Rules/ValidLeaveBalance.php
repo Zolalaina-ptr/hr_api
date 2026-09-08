@@ -26,6 +26,11 @@ class ValidLeaveBalance implements Rule
         return $this->hasSufficientBalance();
     }
 
+    public function message(): string
+    {
+        return 'Insufficient leave balance for the requested period.';
+    }
+
     public function fails($attribute, $value)
     {
         return !$this->hasSufficientBalance();

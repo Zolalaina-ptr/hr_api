@@ -214,6 +214,9 @@ class PayrollApiTest extends TestCase
 
         $response = $this->patchJson("/api/payrolls/{$payroll->id}/validate");
 
+        fwrite(STDERR, "DEBUG-VALIDATE-BODY: ".$response->getContent()."\n");
+        fwrite(STDERR, "DEBUG-VALIDATE-DB: ".json_encode(\App\Models\Payroll::find($payroll->id)?->toArray())."\n");
+
         $response->assertStatus(200)
             ->assertJsonPath('data.status', 'validated');
 
@@ -229,6 +232,9 @@ class PayrollApiTest extends TestCase
         $response = $this->patchJson("/api/payrolls/{$payroll->id}/pay", [
             'payment_reference' => 'REF-2026-0901',
         ]);
+
+        fwrite(STDERR, "DEBUG-PAY-BODY: ".$response->getContent()."\n");
+        fwrite(STDERR, "DEBUG-PAY-DB: ".json_encode(\App\Models\Payroll::find($payroll->id)?->toArray())."\n");
 
         $response->assertStatus(200)
             ->assertJsonPath('data.status', 'paid')
@@ -265,7 +271,7 @@ class PayrollApiTest extends TestCase
 
         $response->assertStatus(200);
         $this->assertStringStartsWith('text/csv', $response->headers->get('Content-Type'));
-        $this->assertStringContainsString('employee_id', $response->getContent());
+        $this->assertStringContainsString('employee_id', $response->streamedContent());
     }
 
     private function makePayroll(array $overrides = []): \App\Models\Payroll

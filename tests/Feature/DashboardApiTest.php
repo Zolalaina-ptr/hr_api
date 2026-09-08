@@ -92,8 +92,9 @@ class DashboardApiTest extends TestCase
 
         $response = $this->getJson('/api/dashboard/attendance');
 
-        $response->assertStatus(200)
-            ->assertJsonPath('data.rate', 100.0);
+        $response->assertStatus(200);
+        // JSON drops the ".0" of whole-number floats, so compare numerically
+        $this->assertSame(100.0, (float) $response->json('data.rate'));
     }
 
     public function test_attendance_rate_is_zero_without_attendance(): void

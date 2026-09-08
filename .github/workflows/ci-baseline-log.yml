@@ -55,7 +55,7 @@ jobs:
               php artisan migrate:fresh --force 2>&1
               echo "===== migrate fresh exit: $? ====="
               echo "===== TESTS ====="
-              php artisan test --log-junit=/tmp/junit.xml 2>&1
+              php -d display_errors=On artisan test --log-junit=/tmp/junit.xml 2>&1
               echo "===== tests exit: $? ====="
               echo "===== JUNIT FAILURES ====="
               if [ -f /tmp/junit.xml ]; then
@@ -66,14 +66,14 @@ jobs:
               echo "===== PER-CLASS DIAG ====="
               for C in LeaveApiTest ContractApiTest NotificationApiTest DashboardApiTest PayrollApiTest; do
                 echo "===== DIAG $C ====="
-                php artisan test --filter="$C" > /tmp/diag-$C.out 2>&1
+                php -d display_errors=On artisan test --filter="$C" > /tmp/diag-$C.out 2>&1
                 echo "diag $C exit: $?"
                 tail -120 /tmp/diag-$C.out
                 if grep -q "Premature end of PHP process" /tmp/diag-$C.out; then
                   M=$(grep -o "when running Tests\\\\Feature\\\\$C::[a-zA-Z_]*" /tmp/diag-$C.out | head -1 | sed 's/.*:://')
                   echo "crash detected in $C — solo run: $M"
                   if [ -n "$M" ]; then
-                    php artisan test --filter="$C::$M" 2>&1 | tail -60
+                    php -d display_errors=On artisan test --filter="$C::$M" 2>&1 | tail -60
                     echo "diag $C::$M exit: $?"
                   fi
                 fi

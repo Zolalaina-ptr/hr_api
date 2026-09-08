@@ -769,6 +769,6 @@ class LeaveApiTest extends TestCase
 
         $response->assertStatus(200);
         $this->assertStringStartsWith('text/csv', $response->headers->get('Content-Type'));
-        $this->assertStringContainsString('ID', $response->getContent());
+        $this->assertStringContainsString('ID', $response->streamedContent());
     }
 }

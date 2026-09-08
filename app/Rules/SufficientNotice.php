@@ -38,6 +38,11 @@ class SufficientNotice implements Rule
         return $diffDays >= $minNotice;
     }
 
+    public function message(): string
+    {
+        return 'This leave type requires more advance notice.';
+    }
+
     public function fails($attribute, $value)
     {
         return ! $this->passes($attribute, $value);
