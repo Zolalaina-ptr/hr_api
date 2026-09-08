@@ -59,20 +59,20 @@ jobs:
               echo "===== tests exit: $? ====="
               echo "===== JUNIT FAILURES ====="
               if [ -f /tmp/junit.xml ]; then
-                python3 - <<'PYEOF' 2>&1
-                import xml.etree.ElementTree as ET
-                root = ET.parse('/tmp/junit.xml').getroot()
-                found = 0
-                for tc in root.iter('testcase'):
-                    for tag in ('failure', 'error'):
-                        for f in tc.findall(tag):
-                            found += 1
-                            print(f"---- {tc.get('classname')}::{tc.get('name')} [{tag}: {f.get('type')}] ----")
-                            print((f.text or '')[:3500])
-                            print()
-                if not found:
-                    print("no failures in junit")
-                PYEOF
+                python3 -c "
+import xml.etree.ElementTree as ET
+root = ET.parse('/tmp/junit.xml').getroot()
+found = 0
+for tc in root.iter('testcase'):
+    for tag in ('failure', 'error'):
+        for f in tc.findall(tag):
+            found += 1
+            print('---- %s::%s [%s: %s] ----' % (tc.get('classname'), tc.get('name'), tag, f.get('type')))
+            print((f.text or '')[:3500])
+            print()
+if not found:
+    print('no failures in junit')
+" 2>&1
               else
                 echo "!!! no junit.xml (run crashed before the summary)"
               fi
