@@ -217,7 +217,10 @@ class PayrollApiTest extends TestCase
         $queries = \Illuminate\Support\Facades\DB::getQueryLog();
         \Illuminate\Support\Facades\DB::disableQueryLog();
 
-        fwrite(STDERR, "DEBUG-VALIDATE-QUERIES: ".json_encode(array_slice($queries, -6))."\n");
+        fwrite(STDERR, "DEBUG-VALIDATE-QCOUNT: ".count($queries)."\n");
+        foreach ($queries as $q) {
+            fwrite(STDERR, "DEBUG-Q: ".$q['query']."\n");
+        }
         fwrite(STDERR, "DEBUG-VALIDATE-BODY: ".$response->getContent()."\n");
 
         $response->assertStatus(200)
