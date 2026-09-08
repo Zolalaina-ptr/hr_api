@@ -152,12 +152,17 @@ class LeaveApiTest extends TestCase
 
         Sanctum::actingAs($this->employeeUser);
 
+        \Illuminate\Support\Facades\DB::enableQueryLog();
         $response = $this->postJson('/api/leaves', [
             'leave_type_id' => $type->id,
             'reason' => 'Family event',
             'start_date' => $dates['start_date'],
             'end_date' => $dates['end_date'],
         ]);
+        foreach (\Illuminate\Support\Facades\DB::getQueryLog() as $q) {
+            fwrite(STDERR, "DEBUG-CREATE-Q: ".$q['query']." | ".json_encode($q['bindings'])."\n");
+        }
+        \Illuminate\Support\Facades\DB::disableQueryLog();
 
         $response->assertCreated()
             ->assertJsonPath('data.employee_id', $this->employee->id)
@@ -500,7 +505,7 @@ class LeaveApiTest extends TestCase
 
         $response = $this->getJson("/api/leaves/{$leave->id}");
 
-        fwrite(STDERR, "DEBUG-SHOW-BODY: ".$response->getContent()."\n");
+        fwrite(STDERR, "DEBUG-SHOW-KEYS: ".json_encode(array_keys($response->json('data')))."\n");
 
         $response->assertStatus(200)
             ->assertJsonPath('data.id', $leave->id)
