@@ -3,6 +3,8 @@
 namespace App\Services;
 
 use App\Exceptions\BusinessRuleException;
+use App\Events\LeaveReplacementRequested;
+use App\Events\LeaveReplacementStatusChanged;
 use App\Models\Leave;
 use App\Models\LeaveReplacement;
 use Illuminate\Database\Eloquent\Collection;
@@ -39,7 +41,7 @@ class LeaveReplacementService
             throw new BusinessRuleException('An accepted replacement already exists for this leave');
         }
 
-        return LeaveReplacement::create([
+        $replacement = LeaveReplacement::create([
             'leave_id' => $leave->id,
             'original_employee_id' => $leave->employee_id,
             'replacement_employee_id' => $data['replacement_employee_id'],
@@ -49,10 +51,15 @@ class LeaveReplacementService
             'status' => 'pending',
             'requested_by' => $requestedBy,
         ]);
+
+        LeaveReplacementRequested::dispatch($replacement);
+
+        return $replacement;
     }
 
     public function accept(LeaveReplacement $replacement): LeaveReplacement
     {
+        $previousStatus = $replacement->status;
         $this->assertTransitionAllowed($replacement, 'accepted');
 
         $replacement->update([
@@ -61,11 +68,12 @@ class LeaveReplacementService
             'approved_at' => now(),
         ]);
 
-        return $replacement->fresh();
+        return $this->dispatchStatusChanged($replacement, $previousStatus);
     }
 
     public function decline(LeaveReplacement $replacement, ?string $reason = null): LeaveReplacement
     {
+        $previousStatus = $replacement->status;
         $this->assertTransitionAllowed($replacement, 'declined');
 
         $replacement->update([
@@ -75,18 +83,28 @@ class LeaveReplacementService
             'approved_at' => now(),
         ]);
 
-        return $replacement->fresh();
+        return $this->dispatchStatusChanged($replacement, $previousStatus);
     }
 
     public function cancel(LeaveReplacement $replacement): LeaveReplacement
     {
+        $previousStatus = $replacement->status;
         $this->assertTransitionAllowed($replacement, 'cancelled');
 
         $replacement->update([
             'status' => 'cancelled',
         ]);
 
-        return $replacement->fresh();
+        return $this->dispatchStatusChanged($replacement, $previousStatus);
+    }
+
+    private function dispatchStatusChanged(LeaveReplacement $replacement, string $previousStatus): LeaveReplacement
+    {
+        $updated = $replacement->fresh();
+
+        LeaveReplacementStatusChanged::dispatch($updated, $previousStatus);
+
+        return $updated;
     }
 
     private function assertTransitionAllowed(LeaveReplacement $replacement, string $target): void

@@ -8,9 +8,11 @@ use App\Models\LeaveReplacement;
 use App\Models\LeaveType;
 use App\Models\Permission;
 use App\Models\User;
+use App\Events\LeaveReplacementRequested;
 use Database\Seeders\PermissionSeeder;
 use Database\Seeders\RoleSeeder;
 use Illuminate\Foundation\Testing\RefreshDatabase;
+use Illuminate\Support\Facades\Event;
 use Laravel\Sanctum\Sanctum;
 use Tests\TestCase;
 
@@ -498,5 +500,140 @@ class LeaveReplacementApiTest extends TestCase
             'id' => $cancelled->id,
             'status' => 'cancelled',
         ]);
+    }
+
+    // -----------------------------------------------------------------
+    // Notifications
+    // -----------------------------------------------------------------
+
+    public function test_leave_replacement_requested_event_is_dispatched_on_creation(): void
+    {
+        Event::fake([LeaveReplacementRequested::class]);
+
+        $leave = $this->createLeave();
+        $replacementEmployee = Employee::factory()->create();
+
+        Sanctum::actingAs($this->adminUser);
+
+        $this->postJson("/api/leaves/{$leave->id}/replacements", [
+            'replacement_employee_id' => $replacementEmployee->id,
+        ])->assertCreated();
+
+        Event::assertDispatched(LeaveReplacementRequested::class, fn ($e) => $e->replacement->leave_id === $leave->id
+            && $e->replacement->replacement_employee_id === $replacementEmployee->id);
+    }
+
+    public function test_requesting_replacement_notifies_replacement_employee_user(): void
+    {
+        $leave = $this->createLeave();
+        $replacementUser = User::factory()->create();
+        $replacementEmployee = Employee::factory()->create([
+            'user_id' => $replacementUser->id,
+            'status' => 'active',
+        ]);
+
+        Sanctum::actingAs($this->adminUser);
+
+        $this->postJson("/api/leaves/{$leave->id}/replacements", [
+            'replacement_employee_id' => $replacementEmployee->id,
+            'responsibilities' => 'Cover the support line',
+        ])->assertCreated();
+
+        $this->assertDatabaseCount('notifications', 1);
+
+        $notification = $replacementUser->notifications()->first();
+
+        $this->assertEquals('leave_replacement_requested', $notification->data['type']);
+        $this->assertEquals($leave->id, $notification->data['leave_id']);
+        $this->assertEquals($replacementEmployee->id, $notification->data['replacement_employee_id']);
+        $this->assertEquals('Cover the support line', $notification->data['responsibilities']);
+    }
+
+    public function test_requesting_replacement_without_linked_user_creates_no_notification(): void
+    {
+        $leave = $this->createLeave();
+        $replacementEmployee = Employee::factory()->create();
+
+        Sanctum::actingAs($this->adminUser);
+
+        $this->postJson("/api/leaves/{$leave->id}/replacements", [
+            'replacement_employee_id' => $replacementEmployee->id,
+        ])->assertCreated();
+
+        $this->assertDatabaseCount('notifications', 0);
+    }
+
+    public function test_accepting_replacement_notifies_requester(): void
+    {
+        $replacementUser = User::factory()->create();
+        $replacementEmployee = Employee::factory()->create([
+            'user_id' => $replacementUser->id,
+            'status' => 'active',
+        ]);
+        $leave = $this->createLeave();
+        $replacement = $this->createReplacement($leave, $replacementEmployee, [
+            'requested_by' => $this->employeeUser->id,
+        ]);
+
+        Sanctum::actingAs($this->adminUser);
+
+        $this->patchJson("/api/replacements/{$replacement->id}/accept")
+            ->assertOk()
+            ->assertJsonPath('data.status', 'accepted');
+
+        $this->assertDatabaseCount('notifications', 1);
+
+        $notification = $this->employeeUser->notifications()->first();
+
+        $this->assertEquals('leave_replacement_accepted', $notification->data['type']);
+        $this->assertEquals('pending', $notification->data['previous_status']);
+        $this->assertEquals('accepted', $notification->data['status']);
+    }
+
+    public function test_declining_replacement_notifies_requester_with_reason(): void
+    {
+        $leave = $this->createLeave();
+        $replacement = $this->createReplacement($leave, null, [
+            'requested_by' => $this->employeeUser->id,
+        ]);
+
+        Sanctum::actingAs($this->adminUser);
+
+        $this->patchJson("/api/replacements/{$replacement->id}/decline", [
+            'reason' => 'Out of office that week',
+        ])->assertOk();
+
+        $this->assertDatabaseCount('notifications', 1);
+
+        $notification = $this->employeeUser->notifications()->first();
+
+        $this->assertEquals('leave_replacement_declined', $notification->data['type']);
+        $this->assertEquals('declined', $notification->data['status']);
+        $this->assertEquals('Out of office that week', $notification->data['rejection_reason']);
+    }
+
+    public function test_cancelling_replacement_notifies_replacement_employee_user(): void
+    {
+        $replacementUser = User::factory()->create();
+        $replacementEmployee = Employee::factory()->create([
+            'user_id' => $replacementUser->id,
+            'status' => 'active',
+        ]);
+        $leave = $this->createLeave();
+        $replacement = $this->createReplacement($leave, $replacementEmployee);
+
+        Sanctum::actingAs($this->adminUser);
+
+        $this->deleteJson("/api/replacements/{$replacement->id}")
+            ->assertOk()
+            ->assertJsonPath('data.status', 'cancelled');
+
+        $this->assertDatabaseCount('notifications', 1);
+
+        $notification = $replacementUser->notifications()->first();
+
+        $this->assertEquals('leave_replacement_cancelled', $notification->data['type']);
+        $this->assertEquals('pending', $notification->data['previous_status']);
+        $this->assertEquals('cancelled', $notification->data['status']);
     }
 }

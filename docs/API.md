@@ -70,6 +70,11 @@ Machine à états : `pending → accepted | declined | cancelled`,
 transitions invalides renvoient une erreur métier HTTP 422
 (`BusinessRuleException`).
 
+Notifications automatiques (module `notifications`) : demande → utilisateur
+lié à l'employé remplaçant ; acceptation/refus → demandeur ; annulation →
+remplaçant. Aucune notification n'est émise si l'employé n'a pas d'utilisateur
+lié.
+
 Les réponses utilisent le format standard :
 
 ```json

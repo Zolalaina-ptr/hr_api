@@ -1,0 +1,19 @@
+<?php
+
+namespace App\Events;
+
+use App\Models\LeaveReplacement;
+use Illuminate\Foundation\Events\Dispatchable;
+use Illuminate\Queue\SerializesModels;
+
+class LeaveReplacementStatusChanged
+{
+    use Dispatchable;
+    use SerializesModels;
+
+    public function __construct(
+        public LeaveReplacement $replacement,
+        public string $previousStatus,
+    ) {
+    }
+}
