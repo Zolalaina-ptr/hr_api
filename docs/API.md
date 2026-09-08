@@ -30,7 +30,21 @@ Les modules suivants exposent des endpoints CRUD paginés :
 - `/api/notifications`
 - `/api/dashboard`
 
-Les listes acceptent généralement `page`, `per_page` et les filtres propres au module. Les réponses utilisent le format standard :
+Les listes acceptent généralement `page`, `per_page` et les filtres propres au module.
+
+## Filtres `GET /api/employees`
+
+| Paramètre | Description |
+|---|---|
+| `status` | `active`, `inactive`, `on_leave`, `terminated` |
+| `department_id` | Filtrer par département |
+| `position_id` | Filtrer par poste |
+| `contract_type` | `cdi`, `cdd`, `stage`, `alternance` |
+| `search` | Recherche insensible à la casse (nom, prénom, email, matricule) |
+
+`GET /api/employees/{id}/history` renvoie l'historique des changements de poste et de salaire (paginé). `DELETE /api/employees/{id}` effectue une suppression douce (soft delete).
+
+Les réponses utilisent le format standard :
 
 ```json
 {"success": true, "message": "...", "data": {}}
