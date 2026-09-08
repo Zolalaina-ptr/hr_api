@@ -1,0 +1,83 @@
+name: CI Baseline Log
+on:
+  push:
+    branches: [arena/01a08003-hr-api]
+  workflow_dispatch:
+
+jobs:
+  test:
+    runs-on: ubuntu-latest
+    services:
+      postgres:
+        image: postgres:16
+        env:
+          POSTGRES_DB: hr_api_test
+          POSTGRES_USER: postgres
+          POSTGRES_PASSWORD: postgres
+        ports: ['5432:5432']
+        options: >-
+          --health-cmd "pg_isready -U postgres" --health-interval 10s --health-timeout 5s --health-retries 5
+    env:
+      DB_CONNECTION: pgsql
+      DB_HOST: 127.0.0.1
+      DB_PORT: 5432
+      DB_DATABASE: hr_api_test
+      DB_USERNAME: postgres
+      DB_PASSWORD: postgres
+    steps:
+      - uses: actions/checkout@v4
+
+      - uses: shivammathur/setup-php@v2
+        with:
+          php-version: '8.3'
+          extensions: pdo_pgsql
+          coverage: none
+
+      - uses: ramsey/composer-install@v3
+
+      - name: Setup environment
+        run: |
+          cp .env.example .env
+          php artisan key:generate
+          php artisan migrate --force
+        continue-on-error: true
+
+      - name: Run tests (capture everything)
+        run: |
+          {
+            echo "===== ENV: php ====="
+            php -v
+            echo "===== ENV: composer show (top) ====="
+            composer show --direct 2>&1 | head -20
+            echo "===== MIGRATE FRESH ====="
+            php artisan migrate:fresh --force 2>&1
+            echo "===== TESTS ====="
+            php artisan test 2>&1
+            echo "===== EXIT CODE OF TESTS: $? ====="
+          } > /tmp/ci-test.log 2>&1 || true
+          echo "--- log size: $(wc -c < /tmp/ci-test.log) bytes ---"
+
+      - name: Post log to issue #2
+        env:
+          GH_TOKEN: ${{ github.token }}
+        run: |
+          LOG=/tmp/ci-test.log
+          SIZE=$(wc -c < "$LOG")
+          echo "Posting log of $SIZE bytes to issue #2..."
+          CHARS_PER_COMMENT=60000
+          TOTAL=$(( (SIZE + CHARS_PER_COMMENT - 1) / CHARS_PER_COMMENT ))
+          [ "$TOTAL" -gt 4 ] && TOTAL=4   # cap at 4 comments (last 240 KB of the log)
+          START_OFFSET=$(( ( ( (SIZE + CHARS_PER_COMMENT - 1) / CHARS_PER_COMMENT ) - TOTAL ) * CHARS_PER_COMMENT ))
+          for ((i=0; i<TOTAL; i++)); do
+            OFFSET=$(( START_OFFSET + i * CHARS_PER_COMMENT ))
+            if [ "$TOTAL" -eq 1 ]; then LABEL="full log"; else LABEL="part $((i+1))/$TOTAL"; fi
+            {
+              echo "**[${GITHUB_SHA::7}] $(date -u +%H:%M:%S UTC) — $LABEL**"
+              echo '```'
+              tail -c +$((OFFSET + 1)) "$LOG" | head -c $CHARS_PER_COMMENT
+              echo ''
+              echo '```'
+            } > /tmp/comment.md
+            gh issue comment 2 --body-file /tmp/comment.md
+          done
+          echo "Done posting to issue #2."
