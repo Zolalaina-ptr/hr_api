@@ -9,6 +9,7 @@ use App\Models\User;
 use Database\Seeders\PermissionSeeder;
 use Database\Seeders\RoleSeeder;
 use Illuminate\Foundation\Testing\RefreshDatabase;
+use Illuminate\Support\Facades\Cache;
 use Laravel\Sanctum\Sanctum;
 use Tests\TestCase;
 
@@ -86,6 +87,9 @@ class DashboardApiTest extends TestCase
 
         Sanctum::actingAs($this->user);
 
+        // statistics() is cached for 5 minutes — clear it so the rate is recomputed
+        Cache::flush();
+
         $response = $this->getJson('/api/dashboard/attendance');
 
         $response->assertStatus(200)
@@ -97,6 +101,8 @@ class DashboardApiTest extends TestCase
         Employee::factory(2)->create(['status' => 'active']);
 
         Sanctum::actingAs($this->user);
+
+        Cache::flush();
 
         $response = $this->getJson('/api/dashboard/attendance');
 

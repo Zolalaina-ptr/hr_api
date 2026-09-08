@@ -143,7 +143,8 @@ class ContractApiTest extends TestCase
 
         $response->assertStatus(200);
         $this->assertCount(1, $response->json('data'));
-        $this->assertEquals(
+        // date cast serializes as ISO datetime — compare the date part only
+        $this->assertStringStartsWith(
             now()->addDays(10)->toDateString(),
             $response->json('data.0.end_date')
         );
@@ -253,7 +254,7 @@ class ContractApiTest extends TestCase
 
         $response->assertStatus(200)
             ->assertJsonPath('data.type', 'cdd')
-            ->assertJsonPath('data.gross_annual_salary', 46000);
+            ->assertJsonPath('data.gross_annual_salary', '46000.00');
 
         $this->assertDatabaseHas('contracts', [
             'id' => $contract->id,

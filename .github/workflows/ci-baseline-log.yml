@@ -55,8 +55,42 @@ jobs:
               php artisan migrate:fresh --force 2>&1
               echo "===== migrate fresh exit: $? ====="
               echo "===== TESTS ====="
-              php artisan test 2>&1
+              php artisan test --log-junit=/tmp/junit.xml 2>&1
               echo "===== tests exit: $? ====="
+              echo "===== JUNIT FAILURES ====="
+              if [ -f /tmp/junit.xml ]; then
+                python3 - <<'PYEOF' 2>&1
+                import xml.etree.ElementTree as ET
+                root = ET.parse('/tmp/junit.xml').getroot()
+                found = 0
+                for tc in root.iter('testcase'):
+                    for tag in ('failure', 'error'):
+                        for f in tc.findall(tag):
+                            found += 1
+                            print(f"---- {tc.get('classname')}::{tc.get('name')} [{tag}: {f.get('type')}] ----")
+                            print((f.text or '')[:3500])
+                            print()
+                if not found:
+                    print("no failures in junit")
+                PYEOF
+              else
+                echo "!!! no junit.xml (run crashed before the summary)"
+              fi
+              echo "===== PER-CLASS DIAG ====="
+              for C in LeaveApiTest ContractApiTest NotificationApiTest DashboardApiTest PayrollApiTest; do
+                echo "===== DIAG $C ====="
+                php artisan test --filter="$C" > /tmp/diag-$C.out 2>&1
+                echo "diag $C exit: $?"
+                tail -120 /tmp/diag-$C.out
+                if grep -q "Premature end of PHP process" /tmp/diag-$C.out; then
+                  M=$(grep -o "when running Tests\\\\Feature\\\\$C::[a-zA-Z_]*" /tmp/diag-$C.out | head -1 | sed 's/.*:://')
+                  echo "crash detected in $C — solo run: $M"
+                  if [ -n "$M" ]; then
+                    php artisan test --filter="$C::$M" 2>&1 | tail -60
+                    echo "diag $C::$M exit: $?"
+                  fi
+                fi
+              done
             else
               echo "!!! VENDOR MISSING — composer install failed, skipping tests"
             fi
