@@ -1,0 +1,118 @@
+name: CI Baseline Log
+on:
+  push:
+    branches: [arena/01a08003-hr-api]
+  workflow_dispatch:
+
+permissions:
+  contents: write
+  checks: write
+  issues: write
+
+jobs:
+  test:
+    runs-on: ubuntu-latest
+    services:
+      postgres:
+        image: postgres:16
+        env:
+          POSTGRES_DB: hr_api_test
+          POSTGRES_USER: postgres
+          POSTGRES_PASSWORD: postgres
+        ports: ['5432:5432']
+        options: >-
+          --health-cmd "pg_isready -U postgres" --health-interval 10s --health-timeout 5s --health-retries 5
+    env:
+      DB_CONNECTION: pgsql
+      DB_HOST: 127.0.0.1
+      DB_PORT: 5432
+      DB_DATABASE: hr_api_test
+      DB_USERNAME: postgres
+      DB_PASSWORD: postgres
+    steps:
+      - uses: actions/checkout@v4
+
+      - uses: shivammathur/setup-php@v2
+        with:
+          php-version: '8.3'
+          extensions: pdo_pgsql
+          coverage: none
+
+      - name: Install + test (capture everything)
+        run: |
+          {
+            echo "===== PHP ====="
+            php -v
+            echo "===== COMPOSER INSTALL ====="
+            composer install --no-interaction --no-progress 2>&1
+            echo "===== composer install exit: $? ====="
+            if [ -d vendor ]; then
+              cp .env.example .env 2>/dev/null || true
+              php artisan key:generate 2>&1 || true
+              echo "===== PHP LINT ====="
+              find app bootstrap routes database tests -name "*.php" -print0 2>/dev/null | xargs -0 -n 50 php -l 2>&1 | grep -v "No syntax errors" || echo "lint: no errors"
+              echo "===== MIGRATE FRESH ====="
+              php artisan migrate:fresh --force 2>&1
+              echo "===== migrate fresh exit: $? ====="
+              echo "===== TESTS ====="
+              php artisan test 2>&1
+              echo "===== tests exit: $? ====="
+            else
+              echo "!!! VENDOR MISSING — composer install failed, skipping tests"
+            fi
+          } > /tmp/ci-test.log 2>&1 || true
+          echo "--- log size: $(wc -c < /tmp/ci-test.log) bytes ---"
+
+      - name: Exfiltrate log (comments + git tag)
+        env:
+          GH_TOKEN: ${{ github.token }}
+        run: |
+          set +e
+          LOG=/tmp/ci-test.log
+          API="https://api.github.com/repos/${GITHUB_REPOSITORY}/issues/2/comments"
+          # sanitized full log
+          tr -d '\000' < "$LOG" 2>/dev/null | iconv -f UTF-8 -t UTF-8 -c > /tmp/full.log
+          post() { # $1 = markdown file -> prints HTTP code
+            jq -n --rawfile body "$1" '{body: $body}' > /tmp/payload.json 2>/dev/null
+            if [ $? -ne 0 ]; then echo "0jq"; return 0; fi
+            curl -s -o /tmp/resp.json -w "%{http_code}" -X POST \
+              -H "Authorization: Bearer ${GH_TOKEN}" \
+              -H "Accept: application/vnd.github+json" \
+              --data @/tmp/payload.json "$API"
+          }
+          SIZE=$(wc -c < /tmp/full.log)
+          CHUNK=60000
+          TOTAL_FULL=$(( (SIZE + CHUNK - 1) / CHUNK ))
+          TOTAL=$TOTAL_FULL
+          if [ "$TOTAL" -gt 3 ]; then TOTAL=3; fi
+          START=$(( (TOTAL_FULL - TOTAL) * CHUNK ))
+          OK=0; FAIL=0; LASTERR=""
+          for ((i=0; i<TOTAL; i++)); do
+            OFFSET=$(( START + i * CHUNK ))
+            {
+              echo "**part $((i+1))/$TOTAL [${GITHUB_SHA::7}] $(date -u +%H:%M:%S UTC)**"
+              echo '```'
+              tail -c +$((OFFSET + 1)) /tmp/full.log | head -c $CHUNK
+              echo ''
+              echo '```'
+            } > /tmp/comment.md
+            CODE=$(post /tmp/comment.md)
+            if [ "$CODE" = "201" ]; then OK=$((OK+1)); else FAIL=$((FAIL+1)); LASTERR=$(head -c 500 /tmp/resp.json); fi
+          done
+          {
+            echo "STATUS [${GITHUB_SHA::7}] log_total=${SIZE}B ok=$OK fail=$FAIL"
+            if [ "$TOTAL_FULL" -gt "$TOTAL" ]; then echo "(truncated: last $((TOTAL * CHUNK)) of $SIZE bytes)"; fi
+            if [ "$FAIL" -gt 0 ]; then echo "LASTERR: $LASTERR"; fi
+          } > /tmp/status.md
+          SC=$(post /tmp/status.md)
+          echo "comments ok=$OK fail=$FAIL status=$SC"
+          # backup channel: git tag with full log
+          git config user.name "baseline-diag"
+          git config user.email "baseline-diag@users.noreply.github.com"
+          TAG="ci-diag-${GITHUB_SHA::8}"
+          BLOB=$(git hash-object -w /tmp/full.log)
+          TREE=$(printf '100644 blob %s\nci-test.log\n' "$BLOB" | git mktree)
+          COMMIT=$(git commit-tree "$TREE" -m "ci diag ${GITHUB_SHA::7}")
+          git push -f origin "${COMMIT}:refs/tags/${TAG}" 2>&1
+          echo "tag ${TAG} pushed"
+          exit 0

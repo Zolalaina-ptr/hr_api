@@ -2,6 +2,7 @@
 
 namespace App\Services;
 
+use App\Exceptions\BusinessRuleException;
 use App\Models\Leave;
 use App\Models\LeaveBalance;
 use App\Models\LeaveRequest as LeaveRequestHistory;
@@ -28,25 +29,25 @@ class LeaveService
         $duration = $this->calculateDays($data['start_date'], $data['end_date'], $data['half_day_portion'] ?? 0);
 
         if ($type->max_days && $duration > $type->max_days) {
-            throw new \RuntimeException("Leave duration ({$duration}) exceeds maximum ({$type->max_days}) for this leave type");
+            throw new BusinessRuleException("Leave duration ({$duration}) exceeds maximum ({$type->max_days}) for this leave type");
         }
 
         if ($type->min_days_notice) {
             $notice = (int) $type->min_days_notice;
             $minStart = Carbon::parse($data['start_date'])->subDays($notice);
             if (Carbon::parse($data['start_date'])->lt($minStart)) {
-                throw new \RuntimeException("This leave type requires {$notice} days notice");
+                throw new BusinessRuleException("This leave type requires {$notice} days notice");
             }
         }
 
         $overlap = $this->checkOverlap($data['employee_id'], $data['start_date'], $data['end_date']);
         if (! empty($overlap)) {
-            throw new \RuntimeException('Leave period overlaps with an existing pending or approved leave');
+            throw new BusinessRuleException('Leave period overlaps with an existing pending or approved leave');
         }
 
         $availability = $this->checkAvailability($data['employee_id'], (int) $data['leave_type_id']);
         if ($availability !== null && $availability < $duration) {
-            throw new \RuntimeException("Insufficient balance ({$availability} days remaining, {$duration} requested)");
+            throw new BusinessRuleException("Insufficient balance ({$availability} days remaining, {$duration} requested)");
         }
 
         $leave = $this->repository->create([
@@ -75,7 +76,7 @@ class LeaveService
         $leave = Leave::findOrFail($id);
 
         if ($leave->status !== 'pending') {
-            throw new \RuntimeException('Only pending leaves can be updated');
+            throw new BusinessRuleException('Only pending leaves can be updated');
         }
 
         if (isset($data['start_date'], $data['end_date'])) {
@@ -95,7 +96,7 @@ class LeaveService
         $leave = Leave::findOrFail($id);
 
         if ($leave->status !== 'pending') {
-            throw new \RuntimeException('Only pending leaves can be approved');
+            throw new BusinessRuleException('Only pending leaves can be approved');
         }
 
         $previousStatus = $leave->status;
@@ -117,7 +118,7 @@ class LeaveService
         $leave = Leave::findOrFail($id);
 
         if (! in_array($leave->status, ['pending'], true)) {
-            throw new \RuntimeException('Only pending leaves can be rejected');
+            throw new BusinessRuleException('Only pending leaves can be rejected');
         }
 
         $previousStatus = $leave->status;
@@ -138,7 +139,7 @@ class LeaveService
         $leave = Leave::findOrFail($id);
 
         if (in_array($leave->status, ['cancelled', 'rejected'], true)) {
-            throw new \RuntimeException('Leave cannot be cancelled in its current state');
+            throw new BusinessRuleException('Leave cannot be cancelled in its current state');
         }
 
         $previousStatus = $leave->status;
@@ -169,12 +170,14 @@ class LeaveService
 
     public function calculateDays($startDate, $endDate, float $halfDayPortion = 0): float
     {
+        // Compare both dates at start of day so the diff is an exact number
+        // of days (Carbon 3 diffInDays returns a float).
         $start = Carbon::parse($startDate)->startOfDay();
-        $end = Carbon::parse($endDate)->endOfDay();
+        $end = Carbon::parse($endDate)->startOfDay();
 
         $days = $start->diffInDays($end) + 1;
 
-        if ($halfDayPortion > 0 && $days === 1) {
+        if ($halfDayPortion > 0 && $days == 1) {
             return 0.5;
         }
 
@@ -211,11 +214,11 @@ class LeaveService
         $end = Carbon::parse($endDate);
 
         if ($end->lt($start)) {
-            throw new \RuntimeException('End date must be on or after start date');
+            throw new BusinessRuleException('End date must be on or after start date');
         }
 
         if ($start->isPast() && ! $start->isToday()) {
-            throw new \RuntimeException('Start date cannot be in the past');
+            throw new BusinessRuleException('Start date cannot be in the past');
         }
     }
 
@@ -260,17 +263,17 @@ class LeaveService
         $leave = Leave::findOrFail($requestId);
 
         if ($leave->status !== 'pending') {
-            throw new \RuntimeException('Only pending leaves can be auto-approved');
+            throw new BusinessRuleException('Only pending leaves can be auto-approved');
         }
 
         $type = $leave->leaveType;
         if (! $type || ! $type->is_active) {
-            throw new \RuntimeException('Leave type is inactive');
+            throw new BusinessRuleException('Leave type is inactive');
         }
 
         $available = $this->checkAvailability($leave->employee_id, $leave->leave_type_id);
         if ($available !== null && $available < (float) $leave->duration_days) {
-            throw new \RuntimeException('Auto-approval failed: insufficient balance');
+            throw new BusinessRuleException('Auto-approval failed: insufficient balance');
         }
 
         return $this->approveRequest($requestId, 'Auto-approved by system');

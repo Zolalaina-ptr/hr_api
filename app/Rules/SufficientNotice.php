@@ -21,6 +21,11 @@ class SufficientNotice implements Rule
 
     public function passes($attribute, $value)
     {
+        if ($this->leaveTypeId <= 0 || ! $this->startDate) {
+            // Other rules report the missing values
+            return true;
+        }
+
         $leaveType = LeaveType::find($this->leaveTypeId);
         if (! $leaveType) {
             return false;

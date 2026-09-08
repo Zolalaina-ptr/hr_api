@@ -33,13 +33,24 @@ class ValidLeaveBalance implements Rule
 
     private function hasSufficientBalance(): bool
     {
+        if (! $this->startDate || ! $this->endDate || $this->employeeId <= 0 || $this->leaveTypeId <= 0) {
+            // Other rules report the missing values
+            return true;
+        }
+
         $duration = $this->calculateDays($this->startDate, $this->endDate);
         $balance = LeaveBalance::where('employee_id', $this->employeeId)
             ->where('leave_type_id', $this->leaveTypeId)
             ->where('year', date('Y'))
             ->first();
 
-        return $balance && $balance->remaining_days >= $duration;
+        // No balance configured for this leave type -> no limitation
+        // (same semantics as LeaveService::checkAvailability())
+        if (! $balance) {
+            return true;
+        }
+
+        return $balance->remaining_days >= $duration;
     }
 
     private function calculateDays(string $startDate, string $endDate): float

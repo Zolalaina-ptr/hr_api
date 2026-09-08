@@ -17,6 +17,8 @@ class PayrollApiTest extends TestCase
 
     private User $adminUser;
 
+    private Employee $employee;
+
     protected function setUp(): void
     {
         parent::setUp();
@@ -27,6 +29,8 @@ class PayrollApiTest extends TestCase
         $this->adminUser = User::factory()->create();
         $this->adminUser->assignRole('admin');
         $this->adminUser->syncPermissions(Permission::all());
+
+        $this->employee = Employee::factory()->create();
     }
 
     public function test_guest_cannot_generate_payroll(): void
@@ -128,5 +132,157 @@ class PayrollApiTest extends TestCase
             ->assertJsonValidationErrors('period_month');
 
         $this->assertDatabaseCount('payrolls', 1);
+    }
+
+    // -----------------------------------------------------------------
+    // Listing / show
+    // -----------------------------------------------------------------
+
+    public function test_can_list_payrolls(): void
+    {
+        $this->makePayroll();
+        $this->makePayroll(['period_month' => 8]);
+
+        Sanctum::actingAs($this->adminUser);
+
+        $response = $this->getJson('/api/payrolls');
+
+        $response->assertStatus(200)
+            ->assertJsonStructure([
+                'data' => [
+                    'data' => [
+                        '*' => ['id', 'employee_id', 'period_month', 'period_year', 'gross_pay', 'net_pay', 'status'],
+                    ],
+                    'meta',
+                ],
+            ]);
+
+        $this->assertEquals(2, $response->json('data.meta.total'));
+    }
+
+    public function test_can_filter_payrolls_by_employee(): void
+    {
+        $other = Employee::factory()->create();
+        $this->makePayroll();
+        $this->makePayroll(['employee_id' => $other->id]);
+
+        Sanctum::actingAs($this->adminUser);
+
+        $response = $this->getJson("/api/payrolls?employee_id={$this->employee->id}");
+
+        $response->assertStatus(200);
+        $this->assertEquals(1, $response->json('data.meta.total'));
+        $this->assertEquals($this->employee->id, $response->json('data.data.0.employee_id'));
+    }
+
+    public function test_can_get_employee_payrolls(): void
+    {
+        $other = Employee::factory()->create();
+        $this->makePayroll();
+        $this->makePayroll(['employee_id' => $other->id]);
+
+        Sanctum::actingAs($this->adminUser);
+
+        $response = $this->getJson("/api/payrolls/employee/{$this->employee->id}");
+
+        $response->assertStatus(200);
+        $this->assertEquals(1, $response->json('data.meta.total'));
+    }
+
+    public function test_can_show_payroll(): void
+    {
+        $payroll = $this->makePayroll();
+
+        Sanctum::actingAs($this->adminUser);
+
+        $response = $this->getJson("/api/payrolls/{$payroll->id}");
+
+        $response->assertStatus(200)
+            ->assertJsonPath('data.id', $payroll->id)
+            ->assertJsonPath('data.employee.id', $this->employee->id);
+    }
+
+    // -----------------------------------------------------------------
+    // Workflow: validate / pay
+    // -----------------------------------------------------------------
+
+    public function test_can_validate_payroll(): void
+    {
+        $payroll = $this->makePayroll();
+
+        Sanctum::actingAs($this->adminUser);
+
+        $response = $this->patchJson("/api/payrolls/{$payroll->id}/validate");
+
+        $response->assertStatus(200)
+            ->assertJsonPath('data.status', 'validated');
+
+        $this->assertDatabaseHas('payrolls', ['id' => $payroll->id, 'status' => 'validated']);
+    }
+
+    public function test_can_pay_payroll(): void
+    {
+        $payroll = $this->makePayroll();
+
+        Sanctum::actingAs($this->adminUser);
+
+        $response = $this->patchJson("/api/payrolls/{$payroll->id}/pay", [
+            'payment_reference' => 'REF-2026-0901',
+        ]);
+
+        $response->assertStatus(200)
+            ->assertJsonPath('data.status', 'paid')
+            ->assertJsonPath('data.payment_reference', 'REF-2026-0901');
+
+        $this->assertDatabaseHas('payrolls', [
+            'id' => $payroll->id,
+            'status' => 'paid',
+            'payment_reference' => 'REF-2026-0901',
+        ]);
+    }
+
+    public function test_user_without_permission_cannot_validate_payroll(): void
+    {
+        $user = User::factory()->create();
+        $payroll = $this->makePayroll();
+
+        Sanctum::actingAs($user);
+
+        $this->patchJson("/api/payrolls/{$payroll->id}/validate")->assertStatus(403);
+    }
+
+    // -----------------------------------------------------------------
+    // Export
+    // -----------------------------------------------------------------
+
+    public function test_can_export_payrolls_as_csv(): void
+    {
+        $this->makePayroll();
+
+        Sanctum::actingAs($this->adminUser);
+
+        $response = $this->getJson('/api/payrolls/export');
+
+        $response->assertStatus(200);
+        $this->assertStringStartsWith('text/csv', $response->headers->get('Content-Type'));
+        $this->assertStringContainsString('employee_id', $response->getContent());
+    }
+
+    private function makePayroll(array $overrides = []): \App\Models\Payroll
+    {
+        return \App\Models\Payroll::create(array_merge([
+            'employee_id' => $this->employee->id,
+            'period_month' => 9,
+            'period_year' => 2026,
+            'base_salary' => 30000,
+            'overtime_pay' => 0,
+            'bonuses' => 0,
+            'benefits_in_kind' => 0,
+            'social_security_employee' => 300,
+            'taxes' => 1500,
+            'gross_pay' => 30000,
+            'net_pay' => 28200,
+            'status' => 'generated',
+        ], $overrides));
     }
 }
