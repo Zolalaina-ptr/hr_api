@@ -33,27 +33,26 @@ jobs:
           extensions: pdo_pgsql
           coverage: none
 
-      - uses: ramsey/composer-install@v3
-
-      - name: Setup environment
-        run: |
-          cp .env.example .env
-          php artisan key:generate
-          php artisan migrate --force
-        continue-on-error: true
-
-      - name: Run tests (capture everything)
+      - name: Install + test (capture everything)
         run: |
           {
-            echo "===== ENV: php ====="
+            echo "===== PHP ====="
             php -v
-            echo "===== ENV: composer show (top) ====="
-            composer show --direct 2>&1 | head -20
-            echo "===== MIGRATE FRESH ====="
-            php artisan migrate:fresh --force 2>&1
-            echo "===== TESTS ====="
-            php artisan test 2>&1
-            echo "===== EXIT CODE OF TESTS: $? ====="
+            echo "===== COMPOSER INSTALL ====="
+            composer install --no-interaction --no-progress 2>&1
+            echo "===== composer install exit: $? ====="
+            if [ -d vendor ]; then
+              cp .env.example .env 2>/dev/null || true
+              php artisan key:generate 2>&1 || true
+              echo "===== MIGRATE FRESH ====="
+              php artisan migrate:fresh --force 2>&1
+              echo "===== migrate fresh exit: $? ====="
+              echo "===== TESTS ====="
+              php artisan test 2>&1
+              echo "===== tests exit: $? ====="
+            else
+              echo "!!! VENDOR MISSING — composer install failed, skipping tests"
+            fi
           } > /tmp/ci-test.log 2>&1 || true
           echo "--- log size: $(wc -c < /tmp/ci-test.log) bytes ---"
 
