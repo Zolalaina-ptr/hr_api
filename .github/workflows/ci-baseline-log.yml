@@ -74,7 +74,7 @@ jobs:
           CHUNK=60000
           TOTAL_FULL=$(( (SIZE + CHUNK - 1) / CHUNK ))
           TOTAL=$TOTAL_FULL
-          [ "$TOTAL" -gt 3 ] && TOTAL=3
+          if [ "$TOTAL" -gt 3 ]; then TOTAL=3; fi
           START=$(( (TOTAL_FULL - TOTAL) * CHUNK ))
           OK=0; FAIL=0; LASTERR=""
           for ((i=0; i<TOTAL; i++)); do
@@ -91,8 +91,8 @@ jobs:
           done
           {
             echo "STATUS [${GITHUB_SHA::7}] log_total=$(wc -c < $LOG)B posted_size=$SIZEB ok=$OK fail=$FAIL"
-            [ "$TOTAL_FULL" -gt "$TOTAL" ] && echo "(log truncated: showing last $((TOTAL * CHUNK)) bytes of $SIZE)"
-            [ "$FAIL" -gt 0 ] && { echo "ERROR:"; echo "$LASTERR"; }
+            if [ "$TOTAL_FULL" -gt "$TOTAL" ]; then echo "(log truncated: showing last $((TOTAL * CHUNK)) bytes of $SIZE)"; fi
+            if [ "$FAIL" -gt 0 ]; then echo "ERROR:"; echo "$LASTERR"; fi
           } > /tmp/status.md
           post /tmp/status.md > /dev/null || true
           echo "Posted ok=$OK fail=$FAIL"
