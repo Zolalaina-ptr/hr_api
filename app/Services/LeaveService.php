@@ -41,7 +41,7 @@ class LeaveService
         }
 
         $overlap = $this->checkOverlap($data['employee_id'], $data['start_date'], $data['end_date']);
-        if (! empty($overlap)) {
+        if ($overlap->isNotEmpty()) {
             throw new BusinessRuleException('Leave period overlaps with an existing pending or approved leave');
         }
 
