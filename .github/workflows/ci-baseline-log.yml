@@ -49,6 +49,8 @@ jobs:
             if [ -d vendor ]; then
               cp .env.example .env 2>/dev/null || true
               php artisan key:generate 2>&1 || true
+              echo "===== PHP LINT ====="
+              find app bootstrap routes database tests -name "*.php" -print0 2>/dev/null | xargs -0 -n 50 php -l 2>&1 | grep -v "No syntax errors" || echo "lint: no errors"
               echo "===== MIGRATE FRESH ====="
               php artisan migrate:fresh --force 2>&1
               echo "===== migrate fresh exit: $? ====="

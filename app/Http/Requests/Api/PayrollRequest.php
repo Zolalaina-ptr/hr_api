@@ -14,17 +14,21 @@ class PayrollRequest extends FormRequest
 
     public function rules(): array
     {
+        // Prevent duplicate payroll for the same employee and period.
+        // Backed by the DB unique constraint, but returns a clean 422.
+        $uniquePeriod = new Unique(
+            'payrolls',
+            'period_month',
+            null,
+            null,
+            'employee_id',
+            $this->input('employee_id')
+        );
+        $uniquePeriod = $uniquePeriod->where('period_year', $this->input('period_year'));
+
         return [
             'employee_id' => ['required', 'exists:employees,id'],
-            'period_month' => [
-                'required',
-                'integer',
-                'between:1,12',
-                // Prevent duplicate payroll for the same employee and period
-                // (backed by the DB unique constraint, but returns a clean 422).
-                new Unique('payrolls', 'period_month', null, null, 'employee_id', $this->input('employee_id'))
-                    ->where('period_year', $this->input('period_year')),
-            ],
+            'period_month' => ['required', 'integer', 'between:1,12', $uniquePeriod],
             'period_year' => ['required', 'integer', 'min:2000', 'max:2100'],
             'overtime_pay' => ['nullable', 'numeric', 'min:0'],
             'bonuses' => ['nullable', 'numeric', 'min:0'],
