@@ -62,14 +62,38 @@ jobs:
         run: |
           set +e
           API="https://api.github.com/repos/${GITHUB_REPOSITORY}/issues/2/comments"
+          CHECKS_API="https://api.github.com/repos/${GITHUB_REPOSITORY}/check-runs"
           post() { # $1 = markdown file
-            jq -n --rawfile body "$1" '{body: $body}' > /tmp/payload.json 2>/dev/null
-            if [ $? -ne 0 ]; then echo "jq failed on $1"; return 1; fi
+            jq -n --rawfile body "$1" '{body: $body}' > /tmp/payload.json 2>/tmp/jq.err
+            if [ $? -ne 0 ]; then echo "jq failed on $1: $(head -c 300 /tmp/jq.err)" >> /tmp/diag.txt; return 1; fi
             curl -s -o /tmp/resp.json -w "%{http_code}" -X POST \
               -H "Authorization: Bearer ${GH_TOKEN}" \
               -H "Accept: application/vnd.github+json" \
               --data @/tmp/payload.json "$API"
           }
+          DIAG="==== baseline diagnostics $(date -u) ====\n"
+          echo "repo=${GITHUB_REPOSITORY} sha=${GITHUB_SHA::7}" >> /tmp/diag.txt
+          echo "GH_TOKEN set: $([ -n "$GH_TOKEN" ] && echo yes || echo NO)" >> /tmp/diag.txt
+          echo "jq: $(jq --version 2>&1) | curl: $(curl --version 2>&1 | head -1)" >> /tmp/diag.txt
+          # 1) tiny post test
+          echo "DIAG tiny comment test [${GITHUB_SHA::7}]" > /tmp/tiny.md
+          TINY_CODE=$(post /tmp/tiny.md)
+          echo "tiny post => HTTP $TINY_CODE resp=$(head -c 300 /tmp/resp.json)" >> /tmp/diag.txt
+          # 2) large post test (100 KB of 'x')
+          head -c 100000 /dev/zero | tr '\0' 'x' > /tmp/big.md
+          BIG_CODE=$(post /tmp/big.md)
+          echo "big post (100KB) => HTTP $BIG_CODE resp=$(head -c 300 /tmp/resp.json)" >> /tmp/diag.txt
+          # 3) check-run creation test (diagnostic exfiltration channel)
+          jq -n --arg s "$(head -c 10000 /tmp/diag.txt)" \
+            --arg sha "$GITHUB_SHA" \
+            '{name:"baseline-diag", head_sha:$sha, status:"completed", conclusion:"neutral", output:{title:"diag", summary:$s}}' > /tmp/check.json
+          CHECK_CODE=$(curl -s -o /tmp/check_resp.json -w "%{http_code}" -X POST \
+            -H "Authorization: Bearer ${GH_TOKEN}" \
+            -H "Accept: application/vnd.github+json" \
+            --data @/tmp/check.json "$CHECKS_API")
+          echo "check-run create => HTTP $CHECK_CODE resp=$(head -c 300 /tmp/check_resp.json)" >> /tmp/diag.txt
+          # refresh check-run summary with final diag after main loop (see below)
+          echo "=== diag pre-loop ===" >> /tmp/diag.txt
           LOG=/tmp/ci-test.log
           tail -c 200000 "$LOG" 2>/dev/null | tr -d '\000' | iconv -f UTF-8 -t UTF-8 -c > /tmp/ci-test-tail.log
           SIZE=$(wc -c < /tmp/ci-test-tail.log)
@@ -98,5 +122,14 @@ jobs:
           } > /tmp/status.md
           post /tmp/status.md > /dev/null || true
           echo "Posted ok=$OK fail=$FAIL"
+          # final diagnostic check-run with full picture
+          { echo ""; echo "=== main loop: ok=$OK fail=$FAIL ==="; echo "--- log head ---"; head -c 3000 /tmp/ci-test.log; } >> /tmp/diag.txt
+          jq -n --arg s "$(head -c 10000 /tmp/diag.txt)" \
+            --arg sha "$GITHUB_SHA" \
+            '{name:"baseline-diag", head_sha:$sha, status:"completed", conclusion:"neutral", output:{title:"diag-final", summary:$s}}' > /tmp/check.json
+          curl -s -o /tmp/check_resp.json -w "final check-run: %{http_code}\n" -X POST \
+            -H "Authorization: Bearer ${GH_TOKEN}" \
+            -H "Accept: application/vnd.github+json" \
+            --data @/tmp/check.json "$CHECKS_API" || true
           if [ "$OK" -eq 0 ]; then exit 1; fi
           exit 0
