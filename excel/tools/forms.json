@@ -1,0 +1,752 @@
+[
+  {
+    "name": "frmLogin",
+    "caption": "Connexion sécurisée • RH",
+    "width": 390,
+    "height": 165,
+    "controls": [
+      {
+        "type": "Label",
+        "name": "label_username",
+        "left": 18,
+        "top": 20,
+        "width": 190,
+        "height": 22,
+        "caption": "Utilisateur"
+      },
+      {
+        "type": "TextBox",
+        "name": "username",
+        "left": 168,
+        "top": 20,
+        "width": 190,
+        "height": 22
+      },
+      {
+        "type": "Label",
+        "name": "label_password",
+        "left": 18,
+        "top": 55,
+        "width": 190,
+        "height": 22,
+        "caption": "Mot de passe"
+      },
+      {
+        "type": "TextBox",
+        "name": "password",
+        "left": 168,
+        "top": 55,
+        "width": 190,
+        "height": 22,
+        "passwordChar": "*"
+      },
+      {
+        "type": "CommandButton",
+        "name": "cmdLogin",
+        "left": 168,
+        "top": 95,
+        "width": 190,
+        "height": 22,
+        "caption": "Se connecter"
+      }
+    ]
+  },
+  {
+    "name": "frmEmployee",
+    "caption": "Dossier salarié • Dates au format jj/mm/aaaa",
+    "width": 805,
+    "height": 580,
+    "controls": [
+      {
+        "type": "TextBox",
+        "name": "q",
+        "left": 18,
+        "top": 18,
+        "width": 260,
+        "height": 22
+      },
+      {
+        "type": "CommandButton",
+        "name": "cmdSearch",
+        "left": 290,
+        "top": 18,
+        "width": 120,
+        "height": 22,
+        "caption": "Rechercher"
+      },
+      {
+        "type": "CheckBox",
+        "name": "chkArchives",
+        "left": 430,
+        "top": 18,
+        "width": 230,
+        "height": 22,
+        "caption": "Inclure les sortants"
+      },
+      {
+        "type": "ListBox",
+        "name": "lstResults",
+        "left": 18,
+        "top": 52,
+        "width": 400,
+        "height": 75,
+        "columnCount": 2,
+        "columnWidths": "85 pt;290 pt"
+      },
+      {
+        "type": "CommandButton",
+        "name": "cmdLoad",
+        "left": 440,
+        "top": 52,
+        "width": 130,
+        "height": 22,
+        "caption": "Charger"
+      },
+      {
+        "type": "CommandButton",
+        "name": "cmdNew",
+        "left": 580,
+        "top": 52,
+        "width": 130,
+        "height": 22,
+        "caption": "Nouveau"
+      },
+      {
+        "type": "Label",
+        "name": "label_f1",
+        "left": 18,
+        "top": 145,
+        "width": 190,
+        "height": 22,
+        "caption": "Matricule"
+      },
+      {
+        "type": "TextBox",
+        "name": "f1",
+        "left": 168,
+        "top": 145,
+        "width": 190,
+        "height": 22,
+        "locked": true
+      },
+      {
+        "type": "Label",
+        "name": "label_f2",
+        "left": 18,
+        "top": 176,
+        "width": 190,
+        "height": 22,
+        "caption": "Civilité"
+      },
+      {
+        "type": "ComboBox",
+        "name": "f2",
+        "left": 168,
+        "top": 176,
+        "width": 190,
+        "height": 22,
+        "items": [
+          "Mme",
+          "M.",
+          "Autre"
+        ],
+        "style": 2
+      },
+      {
+        "type": "Label",
+        "name": "label_f3",
+        "left": 18,
+        "top": 207,
+        "width": 190,
+        "height": 22,
+        "caption": "Nom *"
+      },
+      {
+        "type": "TextBox",
+        "name": "f3",
+        "left": 168,
+        "top": 207,
+        "width": 190,
+        "height": 22
+      },
+      {
+        "type": "Label",
+        "name": "label_f4",
+        "left": 18,
+        "top": 238,
+        "width": 190,
+        "height": 22,
+        "caption": "Prénom *"
+      },
+      {
+        "type": "TextBox",
+        "name": "f4",
+        "left": 168,
+        "top": 238,
+        "width": 190,
+        "height": 22
+      },
+      {
+        "type": "Label",
+        "name": "label_f5",
+        "left": 18,
+        "top": 269,
+        "width": 190,
+        "height": 22,
+        "caption": "Naissance jj/mm/aaaa *"
+      },
+      {
+        "type": "TextBox",
+        "name": "f5",
+        "left": 168,
+        "top": 269,
+        "width": 190,
+        "height": 22
+      },
+      {
+        "type": "Label",
+        "name": "label_f6",
+        "left": 18,
+        "top": 300,
+        "width": 190,
+        "height": 22,
+        "caption": "NSS (15 chiffres)"
+      },
+      {
+        "type": "TextBox",
+        "name": "f6",
+        "left": 168,
+        "top": 300,
+        "width": 190,
+        "height": 22
+      },
+      {
+        "type": "Label",
+        "name": "label_f7",
+        "left": 18,
+        "top": 331,
+        "width": 190,
+        "height": 22,
+        "caption": "Téléphone"
+      },
+      {
+        "type": "TextBox",
+        "name": "f7",
+        "left": 168,
+        "top": 331,
+        "width": 190,
+        "height": 22
+      },
+      {
+        "type": "Label",
+        "name": "label_f8",
+        "left": 18,
+        "top": 362,
+        "width": 190,
+        "height": 22,
+        "caption": "E-mail"
+      },
+      {
+        "type": "TextBox",
+        "name": "f8",
+        "left": 168,
+        "top": 362,
+        "width": 190,
+        "height": 22
+      },
+      {
+        "type": "Label",
+        "name": "label_f9",
+        "left": 18,
+        "top": 393,
+        "width": 190,
+        "height": 22,
+        "caption": "Adresse"
+      },
+      {
+        "type": "TextBox",
+        "name": "f9",
+        "left": 168,
+        "top": 393,
+        "width": 190,
+        "height": 22
+      },
+      {
+        "type": "Label",
+        "name": "label_f10",
+        "left": 18,
+        "top": 424,
+        "width": 190,
+        "height": 22,
+        "caption": "Embauche jj/mm/aaaa *"
+      },
+      {
+        "type": "TextBox",
+        "name": "f10",
+        "left": 168,
+        "top": 424,
+        "width": 190,
+        "height": 22
+      },
+      {
+        "type": "Label",
+        "name": "label_f11",
+        "left": 18,
+        "top": 455,
+        "width": 190,
+        "height": 22,
+        "caption": "Contrat *"
+      },
+      {
+        "type": "ComboBox",
+        "name": "f11",
+        "left": 168,
+        "top": 455,
+        "width": 190,
+        "height": 22,
+        "items": [],
+        "style": 2
+      },
+      {
+        "type": "Label",
+        "name": "label_f12",
+        "left": 410,
+        "top": 145,
+        "width": 190,
+        "height": 22,
+        "caption": "Service *"
+      },
+      {
+        "type": "ComboBox",
+        "name": "f12",
+        "left": 560,
+        "top": 145,
+        "width": 190,
+        "height": 22,
+        "items": [],
+        "style": 2
+      },
+      {
+        "type": "Label",
+        "name": "label_f13",
+        "left": 410,
+        "top": 176,
+        "width": 190,
+        "height": 22,
+        "caption": "Poste *"
+      },
+      {
+        "type": "ComboBox",
+        "name": "f13",
+        "left": 560,
+        "top": 176,
+        "width": 190,
+        "height": 22,
+        "items": [],
+        "style": 2
+      },
+      {
+        "type": "Label",
+        "name": "label_f14",
+        "left": 410,
+        "top": 207,
+        "width": 190,
+        "height": 22,
+        "caption": "Salaire brut *"
+      },
+      {
+        "type": "TextBox",
+        "name": "f14",
+        "left": 560,
+        "top": 207,
+        "width": 190,
+        "height": 22
+      },
+      {
+        "type": "Label",
+        "name": "label_f15",
+        "left": 410,
+        "top": 238,
+        "width": 190,
+        "height": 22,
+        "caption": "RIB (optionnel)"
+      },
+      {
+        "type": "TextBox",
+        "name": "f15",
+        "left": 560,
+        "top": 238,
+        "width": 190,
+        "height": 22
+      },
+      {
+        "type": "Label",
+        "name": "label_f16",
+        "left": 410,
+        "top": 269,
+        "width": 190,
+        "height": 22,
+        "caption": "Chemin photo"
+      },
+      {
+        "type": "TextBox",
+        "name": "f16",
+        "left": 560,
+        "top": 269,
+        "width": 190,
+        "height": 22
+      },
+      {
+        "type": "Label",
+        "name": "label_f17",
+        "left": 410,
+        "top": 300,
+        "width": 190,
+        "height": 22,
+        "caption": "Matricule manager"
+      },
+      {
+        "type": "TextBox",
+        "name": "f17",
+        "left": 560,
+        "top": 300,
+        "width": 190,
+        "height": 22
+      },
+      {
+        "type": "Label",
+        "name": "label_f18",
+        "left": 410,
+        "top": 331,
+        "width": 190,
+        "height": 22,
+        "caption": "Statut *"
+      },
+      {
+        "type": "ComboBox",
+        "name": "f18",
+        "left": 560,
+        "top": 331,
+        "width": 190,
+        "height": 22,
+        "items": [
+          "Actif",
+          "Sorti"
+        ],
+        "style": 2
+      },
+      {
+        "type": "Label",
+        "name": "label_f19",
+        "left": 410,
+        "top": 362,
+        "width": 190,
+        "height": 22,
+        "caption": "Sortie jj/mm/aaaa"
+      },
+      {
+        "type": "TextBox",
+        "name": "f19",
+        "left": 560,
+        "top": 362,
+        "width": 190,
+        "height": 22
+      },
+      {
+        "type": "Label",
+        "name": "label_f20",
+        "left": 410,
+        "top": 393,
+        "width": 190,
+        "height": 22,
+        "caption": "Motif de sortie"
+      },
+      {
+        "type": "ComboBox",
+        "name": "f20",
+        "left": 560,
+        "top": 393,
+        "width": 190,
+        "height": 22,
+        "items": [],
+        "style": 2
+      },
+      {
+        "type": "Label",
+        "name": "label_f21",
+        "left": 410,
+        "top": 424,
+        "width": 190,
+        "height": 22,
+        "caption": "Report congés payés *"
+      },
+      {
+        "type": "TextBox",
+        "name": "f21",
+        "left": 560,
+        "top": 424,
+        "width": 190,
+        "height": 22
+      },
+      {
+        "type": "Label",
+        "name": "label_f22",
+        "left": 410,
+        "top": 455,
+        "width": 190,
+        "height": 22,
+        "caption": "Sexe H / F / Autre"
+      },
+      {
+        "type": "ComboBox",
+        "name": "f22",
+        "left": 560,
+        "top": 455,
+        "width": 190,
+        "height": 22,
+        "items": [
+          "H",
+          "F",
+          "Autre",
+          "Non renseigné"
+        ],
+        "style": 2
+      },
+      {
+        "type": "CommandButton",
+        "name": "cmdSave",
+        "left": 180,
+        "top": 505,
+        "width": 190,
+        "height": 28,
+        "caption": "Enregistrer"
+      },
+      {
+        "type": "CommandButton",
+        "name": "cmdDelete",
+        "left": 385,
+        "top": 505,
+        "width": 190,
+        "height": 28,
+        "caption": "Supprimer (Admin)"
+      },
+      {
+        "type": "CommandButton",
+        "name": "cmdClose",
+        "left": 590,
+        "top": 505,
+        "width": 190,
+        "height": 28,
+        "caption": "Fermer"
+      }
+    ]
+  },
+  {
+    "name": "frmLeave",
+    "caption": "Congés et absences",
+    "width": 390,
+    "height": 285,
+    "controls": [
+      {
+        "type": "Label",
+        "name": "label_employeeId",
+        "left": 18,
+        "top": 20,
+        "width": 190,
+        "height": 22,
+        "caption": "Matricule"
+      },
+      {
+        "type": "TextBox",
+        "name": "employeeId",
+        "left": 168,
+        "top": 20,
+        "width": 190,
+        "height": 22
+      },
+      {
+        "type": "Label",
+        "name": "label_startDate",
+        "left": 18,
+        "top": 55,
+        "width": 190,
+        "height": 22,
+        "caption": "Début jj/mm/aaaa"
+      },
+      {
+        "type": "TextBox",
+        "name": "startDate",
+        "left": 168,
+        "top": 55,
+        "width": 190,
+        "height": 22
+      },
+      {
+        "type": "Label",
+        "name": "label_endDate",
+        "left": 18,
+        "top": 90,
+        "width": 190,
+        "height": 22,
+        "caption": "Fin jj/mm/aaaa"
+      },
+      {
+        "type": "TextBox",
+        "name": "endDate",
+        "left": 168,
+        "top": 90,
+        "width": 190,
+        "height": 22
+      },
+      {
+        "type": "Label",
+        "name": "label_kind",
+        "left": 18,
+        "top": 125,
+        "width": 190,
+        "height": 22,
+        "caption": "Type"
+      },
+      {
+        "type": "ComboBox",
+        "name": "kind",
+        "left": 168,
+        "top": 125,
+        "width": 190,
+        "height": 22,
+        "style": 2
+      },
+      {
+        "type": "CommandButton",
+        "name": "cmdSubmit",
+        "left": 168,
+        "top": 170,
+        "width": 190,
+        "height": 22,
+        "caption": "Soumettre la demande"
+      },
+      {
+        "type": "Label",
+        "name": "hint",
+        "left": 18,
+        "top": 207,
+        "width": 350,
+        "height": 42,
+        "caption": "Jours entiers. Le solde affiché déduit aussi les demandes en attente. Seul le type Payé consomme ce solde."
+      }
+    ]
+  },
+  {
+    "name": "frmAccount",
+    "caption": "Administration des comptes",
+    "width": 390,
+    "height": 315,
+    "controls": [
+      {
+        "type": "Label",
+        "name": "label_username",
+        "left": 18,
+        "top": 20,
+        "width": 190,
+        "height": 22,
+        "caption": "Identifiant"
+      },
+      {
+        "type": "TextBox",
+        "name": "username",
+        "left": 168,
+        "top": 20,
+        "width": 190,
+        "height": 22
+      },
+      {
+        "type": "Label",
+        "name": "label_role",
+        "left": 18,
+        "top": 55,
+        "width": 190,
+        "height": 22,
+        "caption": "Rôle"
+      },
+      {
+        "type": "ComboBox",
+        "name": "role",
+        "left": 168,
+        "top": 55,
+        "width": 190,
+        "height": 22,
+        "items": [
+          "Admin",
+          "Gestionnaire",
+          "Manager",
+          "Salarie",
+          "User"
+        ],
+        "style": 2
+      },
+      {
+        "type": "Label",
+        "name": "label_employeeId",
+        "left": 18,
+        "top": 90,
+        "width": 190,
+        "height": 22,
+        "caption": "Matricule lié"
+      },
+      {
+        "type": "TextBox",
+        "name": "employeeId",
+        "left": 168,
+        "top": 90,
+        "width": 190,
+        "height": 22
+      },
+      {
+        "type": "Label",
+        "name": "label_password",
+        "left": 18,
+        "top": 125,
+        "width": 190,
+        "height": 22,
+        "caption": "Nouveau mot de passe"
+      },
+      {
+        "type": "TextBox",
+        "name": "password",
+        "left": 168,
+        "top": 125,
+        "width": 190,
+        "height": 22,
+        "passwordChar": "*"
+      },
+      {
+        "type": "CheckBox",
+        "name": "active",
+        "left": 168,
+        "top": 160,
+        "width": 190,
+        "height": 22,
+        "caption": "Compte actif",
+        "value": true
+      },
+      {
+        "type": "CommandButton",
+        "name": "cmdSave",
+        "left": 168,
+        "top": 195,
+        "width": 190,
+        "height": 22,
+        "caption": "Créer / mettre à jour"
+      },
+      {
+        "type": "Label",
+        "name": "hint",
+        "left": 18,
+        "top": 230,
+        "width": 355,
+        "height": 40,
+        "caption": "Compte existant : renseignez tous les droits. Mot de passe vide = inchangé. 12 caractères minimum sinon."
+      }
+    ]
+  }
+]

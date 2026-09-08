@@ -1,0 +1,2130 @@
+{
+  "schemaVersion": 1,
+  "sheets": [
+    {
+      "name": "Accueil",
+      "cells": [
+        {
+          "address": "B2",
+          "type": "text",
+          "value": "RH / ESPACE DE GESTION"
+        },
+        {
+          "address": "D2",
+          "type": "text",
+          "value": "Gestionnaire RH • Excel / VBA • Démonstration"
+        },
+        {
+          "address": "D3",
+          "type": "text",
+          "value": "Données fictives — un seul utilisateur à la fois — sauvegardez après vos opérations."
+        },
+        {
+          "address": "D4",
+          "type": "text",
+          "value": "Connectez-vous pour consulter votre espace RH."
+        }
+      ],
+      "tables": [],
+      "widths": [
+        {
+          "column": "A",
+          "width": 3.0
+        },
+        {
+          "column": "B",
+          "width": 27.0
+        },
+        {
+          "column": "C",
+          "width": 3.0
+        },
+        {
+          "column": "D",
+          "width": 21.0
+        },
+        {
+          "column": "E",
+          "width": 21.0
+        },
+        {
+          "column": "F",
+          "width": 21.0
+        },
+        {
+          "column": "G",
+          "width": 21.0
+        },
+        {
+          "column": "H",
+          "width": 21.0
+        },
+        {
+          "column": "I",
+          "width": 21.0
+        },
+        {
+          "column": "J",
+          "width": 21.0
+        },
+        {
+          "column": "K",
+          "width": 21.0
+        },
+        {
+          "column": "L",
+          "width": 21.0
+        },
+        {
+          "column": "M",
+          "width": 21.0
+        },
+        {
+          "column": "N",
+          "width": 21.0
+        }
+      ]
+    },
+    {
+      "name": "Base_Salaries",
+      "cells": [
+        {
+          "address": "A1",
+          "type": "text",
+          "value": "Matricule"
+        },
+        {
+          "address": "B1",
+          "type": "text",
+          "value": "Civilite"
+        },
+        {
+          "address": "C1",
+          "type": "text",
+          "value": "Nom"
+        },
+        {
+          "address": "D1",
+          "type": "text",
+          "value": "Prenom"
+        },
+        {
+          "address": "E1",
+          "type": "text",
+          "value": "Naissance"
+        },
+        {
+          "address": "F1",
+          "type": "text",
+          "value": "NSS"
+        },
+        {
+          "address": "G1",
+          "type": "text",
+          "value": "Telephone"
+        },
+        {
+          "address": "H1",
+          "type": "text",
+          "value": "Email"
+        },
+        {
+          "address": "I1",
+          "type": "text",
+          "value": "Adresse"
+        },
+        {
+          "address": "J1",
+          "type": "text",
+          "value": "Embauche"
+        },
+        {
+          "address": "K1",
+          "type": "text",
+          "value": "Contrat"
+        },
+        {
+          "address": "L1",
+          "type": "text",
+          "value": "Service"
+        },
+        {
+          "address": "M1",
+          "type": "text",
+          "value": "Poste"
+        },
+        {
+          "address": "N1",
+          "type": "text",
+          "value": "Salaire"
+        },
+        {
+          "address": "O1",
+          "type": "text",
+          "value": "RIB"
+        },
+        {
+          "address": "P1",
+          "type": "text",
+          "value": "Photo"
+        },
+        {
+          "address": "Q1",
+          "type": "text",
+          "value": "Manager"
+        },
+        {
+          "address": "R1",
+          "type": "text",
+          "value": "Statut"
+        },
+        {
+          "address": "S1",
+          "type": "text",
+          "value": "Sortie"
+        },
+        {
+          "address": "T1",
+          "type": "text",
+          "value": "Motif"
+        },
+        {
+          "address": "U1",
+          "type": "text",
+          "value": "SoldeInitial"
+        },
+        {
+          "address": "V1",
+          "type": "text",
+          "value": "Sexe"
+        },
+        {
+          "address": "A2",
+          "type": "text",
+          "value": "SAL000001"
+        },
+        {
+          "address": "B2",
+          "type": "text",
+          "value": "Mme"
+        },
+        {
+          "address": "C2",
+          "type": "text",
+          "value": "Martin"
+        },
+        {
+          "address": "D2",
+          "type": "text",
+          "value": "Alice"
+        },
+        {
+          "address": "E2",
+          "type": "date",
+          "value": "1985-09-12"
+        },
+        {
+          "address": "H2",
+          "type": "text",
+          "value": "demo1@example.invalid"
+        },
+        {
+          "address": "I2",
+          "type": "text",
+          "value": "Adresse fictive"
+        },
+        {
+          "address": "J2",
+          "type": "date",
+          "value": "2020-01-01"
+        },
+        {
+          "address": "K2",
+          "type": "text",
+          "value": "CDI"
+        },
+        {
+          "address": "L2",
+          "type": "text",
+          "value": "Direction"
+        },
+        {
+          "address": "M2",
+          "type": "text",
+          "value": "Directeur"
+        },
+        {
+          "address": "N2",
+          "type": "number",
+          "value": 2500
+        },
+        {
+          "address": "R2",
+          "type": "text",
+          "value": "Actif"
+        },
+        {
+          "address": "U2",
+          "type": "number",
+          "value": 5
+        },
+        {
+          "address": "V2",
+          "type": "text",
+          "value": "F"
+        },
+        {
+          "address": "A3",
+          "type": "text",
+          "value": "SAL000002"
+        },
+        {
+          "address": "B3",
+          "type": "text",
+          "value": "M."
+        },
+        {
+          "address": "C3",
+          "type": "text",
+          "value": "Bernard"
+        },
+        {
+          "address": "D3",
+          "type": "text",
+          "value": "Lucas"
+        },
+        {
+          "address": "E3",
+          "type": "date",
+          "value": "1990-03-04"
+        },
+        {
+          "address": "H3",
+          "type": "text",
+          "value": "demo2@example.invalid"
+        },
+        {
+          "address": "I3",
+          "type": "text",
+          "value": "Adresse fictive"
+        },
+        {
+          "address": "J3",
+          "type": "date",
+          "value": "2022-01-01"
+        },
+        {
+          "address": "K3",
+          "type": "text",
+          "value": "CDI"
+        },
+        {
+          "address": "L3",
+          "type": "text",
+          "value": "Finance"
+        },
+        {
+          "address": "M3",
+          "type": "text",
+          "value": "Comptable"
+        },
+        {
+          "address": "N3",
+          "type": "number",
+          "value": 2500
+        },
+        {
+          "address": "Q3",
+          "type": "text",
+          "value": "SAL000001"
+        },
+        {
+          "address": "R3",
+          "type": "text",
+          "value": "Actif"
+        },
+        {
+          "address": "U3",
+          "type": "number",
+          "value": 5
+        },
+        {
+          "address": "V3",
+          "type": "text",
+          "value": "H"
+        },
+        {
+          "address": "A4",
+          "type": "text",
+          "value": "SAL000003"
+        },
+        {
+          "address": "B4",
+          "type": "text",
+          "value": "Mme"
+        },
+        {
+          "address": "C4",
+          "type": "text",
+          "value": "Petit"
+        },
+        {
+          "address": "D4",
+          "type": "text",
+          "value": "Emma"
+        },
+        {
+          "address": "E4",
+          "type": "date",
+          "value": "1993-09-24"
+        },
+        {
+          "address": "H4",
+          "type": "text",
+          "value": "demo3@example.invalid"
+        },
+        {
+          "address": "I4",
+          "type": "text",
+          "value": "Adresse fictive"
+        },
+        {
+          "address": "J4",
+          "type": "date",
+          "value": "2023-01-01"
+        },
+        {
+          "address": "K4",
+          "type": "text",
+          "value": "CDI"
+        },
+        {
+          "address": "L4",
+          "type": "text",
+          "value": "Ressources humaines"
+        },
+        {
+          "address": "M4",
+          "type": "text",
+          "value": "Responsable RH"
+        },
+        {
+          "address": "N4",
+          "type": "number",
+          "value": 2500
+        },
+        {
+          "address": "Q4",
+          "type": "text",
+          "value": "SAL000001"
+        },
+        {
+          "address": "R4",
+          "type": "text",
+          "value": "Actif"
+        },
+        {
+          "address": "U4",
+          "type": "number",
+          "value": 5
+        },
+        {
+          "address": "V4",
+          "type": "text",
+          "value": "F"
+        },
+        {
+          "address": "A5",
+          "type": "text",
+          "value": "SAL000004"
+        },
+        {
+          "address": "B5",
+          "type": "text",
+          "value": "M."
+        },
+        {
+          "address": "C5",
+          "type": "text",
+          "value": "Robert"
+        },
+        {
+          "address": "D5",
+          "type": "text",
+          "value": "Hugo"
+        },
+        {
+          "address": "E5",
+          "type": "date",
+          "value": "1988-06-15"
+        },
+        {
+          "address": "H5",
+          "type": "text",
+          "value": "demo4@example.invalid"
+        },
+        {
+          "address": "I5",
+          "type": "text",
+          "value": "Adresse fictive"
+        },
+        {
+          "address": "J5",
+          "type": "date",
+          "value": "2021-01-01"
+        },
+        {
+          "address": "K5",
+          "type": "text",
+          "value": "CDI"
+        },
+        {
+          "address": "L5",
+          "type": "text",
+          "value": "Informatique"
+        },
+        {
+          "address": "M5",
+          "type": "text",
+          "value": "Développeur"
+        },
+        {
+          "address": "N5",
+          "type": "number",
+          "value": 2500
+        },
+        {
+          "address": "Q5",
+          "type": "text",
+          "value": "SAL000001"
+        },
+        {
+          "address": "R5",
+          "type": "text",
+          "value": "Actif"
+        },
+        {
+          "address": "U5",
+          "type": "number",
+          "value": 5
+        },
+        {
+          "address": "V5",
+          "type": "text",
+          "value": "H"
+        },
+        {
+          "address": "A6",
+          "type": "text",
+          "value": "SAL000005"
+        },
+        {
+          "address": "B6",
+          "type": "text",
+          "value": "Mme"
+        },
+        {
+          "address": "C6",
+          "type": "text",
+          "value": "Durand"
+        },
+        {
+          "address": "D6",
+          "type": "text",
+          "value": "Chloé"
+        },
+        {
+          "address": "E6",
+          "type": "date",
+          "value": "1996-11-07"
+        },
+        {
+          "address": "H6",
+          "type": "text",
+          "value": "demo5@example.invalid"
+        },
+        {
+          "address": "I6",
+          "type": "text",
+          "value": "Adresse fictive"
+        },
+        {
+          "address": "J6",
+          "type": "date",
+          "value": "2024-01-01"
+        },
+        {
+          "address": "K6",
+          "type": "text",
+          "value": "CDI"
+        },
+        {
+          "address": "L6",
+          "type": "text",
+          "value": "Finance"
+        },
+        {
+          "address": "M6",
+          "type": "text",
+          "value": "Comptable"
+        },
+        {
+          "address": "N6",
+          "type": "number",
+          "value": 2500
+        },
+        {
+          "address": "Q6",
+          "type": "text",
+          "value": "SAL000001"
+        },
+        {
+          "address": "R6",
+          "type": "text",
+          "value": "Actif"
+        },
+        {
+          "address": "U6",
+          "type": "number",
+          "value": 5
+        },
+        {
+          "address": "V6",
+          "type": "text",
+          "value": "F"
+        }
+      ],
+      "tables": [
+        {
+          "name": "Salaries",
+          "range": "A1:V6",
+          "nativeRange": "A1:V6",
+          "dataRows": 5,
+          "headers": [
+            "Matricule",
+            "Civilite",
+            "Nom",
+            "Prenom",
+            "Naissance",
+            "NSS",
+            "Telephone",
+            "Email",
+            "Adresse",
+            "Embauche",
+            "Contrat",
+            "Service",
+            "Poste",
+            "Salaire",
+            "RIB",
+            "Photo",
+            "Manager",
+            "Statut",
+            "Sortie",
+            "Motif",
+            "SoldeInitial",
+            "Sexe"
+          ]
+        }
+      ],
+      "widths": [
+        {
+          "column": "A",
+          "width": 21.0
+        },
+        {
+          "column": "B",
+          "width": 21.0
+        },
+        {
+          "column": "C",
+          "width": 21.0
+        },
+        {
+          "column": "D",
+          "width": 21.0
+        },
+        {
+          "column": "E",
+          "width": 21.0
+        },
+        {
+          "column": "F",
+          "width": 21.0
+        },
+        {
+          "column": "G",
+          "width": 21.0
+        },
+        {
+          "column": "H",
+          "width": 21.0
+        },
+        {
+          "column": "I",
+          "width": 21.0
+        },
+        {
+          "column": "J",
+          "width": 21.0
+        },
+        {
+          "column": "K",
+          "width": 21.0
+        },
+        {
+          "column": "L",
+          "width": 21.0
+        },
+        {
+          "column": "M",
+          "width": 21.0
+        },
+        {
+          "column": "N",
+          "width": 21.0
+        },
+        {
+          "column": "O",
+          "width": 21.0
+        },
+        {
+          "column": "P",
+          "width": 21.0
+        },
+        {
+          "column": "Q",
+          "width": 21.0
+        },
+        {
+          "column": "R",
+          "width": 21.0
+        },
+        {
+          "column": "S",
+          "width": 21.0
+        },
+        {
+          "column": "T",
+          "width": 21.0
+        },
+        {
+          "column": "U",
+          "width": 21.0
+        },
+        {
+          "column": "V",
+          "width": 21.0
+        }
+      ]
+    },
+    {
+      "name": "Gestion_Conges",
+      "cells": [
+        {
+          "address": "A1",
+          "type": "text",
+          "value": "Identifiant"
+        },
+        {
+          "address": "B1",
+          "type": "text",
+          "value": "Matricule"
+        },
+        {
+          "address": "C1",
+          "type": "text",
+          "value": "Debut"
+        },
+        {
+          "address": "D1",
+          "type": "text",
+          "value": "Fin"
+        },
+        {
+          "address": "E1",
+          "type": "text",
+          "value": "Type"
+        },
+        {
+          "address": "F1",
+          "type": "text",
+          "value": "Jours"
+        },
+        {
+          "address": "G1",
+          "type": "text",
+          "value": "Statut"
+        },
+        {
+          "address": "H1",
+          "type": "text",
+          "value": "Demandeur"
+        },
+        {
+          "address": "I1",
+          "type": "text",
+          "value": "Creation"
+        },
+        {
+          "address": "J1",
+          "type": "text",
+          "value": "Validateur"
+        },
+        {
+          "address": "K1",
+          "type": "text",
+          "value": "Decision"
+        },
+        {
+          "address": "L1",
+          "type": "text",
+          "value": "Motif"
+        }
+      ],
+      "tables": [
+        {
+          "name": "Conges",
+          "range": "A1:L1",
+          "nativeRange": "A1:L2",
+          "dataRows": 0,
+          "headers": [
+            "Identifiant",
+            "Matricule",
+            "Debut",
+            "Fin",
+            "Type",
+            "Jours",
+            "Statut",
+            "Demandeur",
+            "Creation",
+            "Validateur",
+            "Decision",
+            "Motif"
+          ]
+        }
+      ],
+      "widths": [
+        {
+          "column": "A",
+          "width": 21.0
+        },
+        {
+          "column": "B",
+          "width": 21.0
+        },
+        {
+          "column": "C",
+          "width": 21.0
+        },
+        {
+          "column": "D",
+          "width": 21.0
+        },
+        {
+          "column": "E",
+          "width": 21.0
+        },
+        {
+          "column": "F",
+          "width": 21.0
+        },
+        {
+          "column": "G",
+          "width": 21.0
+        },
+        {
+          "column": "H",
+          "width": 21.0
+        },
+        {
+          "column": "I",
+          "width": 21.0
+        },
+        {
+          "column": "J",
+          "width": 21.0
+        },
+        {
+          "column": "K",
+          "width": 21.0
+        },
+        {
+          "column": "L",
+          "width": 21.0
+        },
+        {
+          "column": "M",
+          "width": 21.0
+        },
+        {
+          "column": "N",
+          "width": 21.0
+        }
+      ]
+    },
+    {
+      "name": "Utilisateurs",
+      "cells": [
+        {
+          "address": "A1",
+          "type": "text",
+          "value": "Utilisateur"
+        },
+        {
+          "address": "B1",
+          "type": "text",
+          "value": "Role"
+        },
+        {
+          "address": "C1",
+          "type": "text",
+          "value": "Matricule"
+        },
+        {
+          "address": "D1",
+          "type": "text",
+          "value": "Sel"
+        },
+        {
+          "address": "E1",
+          "type": "text",
+          "value": "Empreinte"
+        },
+        {
+          "address": "F1",
+          "type": "text",
+          "value": "Actif"
+        },
+        {
+          "address": "A2",
+          "type": "text",
+          "value": "admin"
+        },
+        {
+          "address": "B2",
+          "type": "text",
+          "value": "Admin"
+        },
+        {
+          "address": "E2",
+          "type": "text",
+          "value": "A_INITIALISER"
+        },
+        {
+          "address": "F2",
+          "type": "text",
+          "value": "Oui"
+        }
+      ],
+      "tables": [
+        {
+          "name": "Utilisateurs",
+          "range": "A1:F2",
+          "nativeRange": "A1:F2",
+          "dataRows": 1,
+          "headers": [
+            "Utilisateur",
+            "Role",
+            "Matricule",
+            "Sel",
+            "Empreinte",
+            "Actif"
+          ]
+        }
+      ],
+      "widths": [
+        {
+          "column": "A",
+          "width": 21.0
+        },
+        {
+          "column": "B",
+          "width": 21.0
+        },
+        {
+          "column": "C",
+          "width": 21.0
+        },
+        {
+          "column": "D",
+          "width": 21.0
+        },
+        {
+          "column": "E",
+          "width": 21.0
+        },
+        {
+          "column": "F",
+          "width": 21.0
+        },
+        {
+          "column": "G",
+          "width": 21.0
+        },
+        {
+          "column": "H",
+          "width": 21.0
+        },
+        {
+          "column": "I",
+          "width": 21.0
+        },
+        {
+          "column": "J",
+          "width": 21.0
+        },
+        {
+          "column": "K",
+          "width": 21.0
+        },
+        {
+          "column": "L",
+          "width": 21.0
+        },
+        {
+          "column": "M",
+          "width": 21.0
+        },
+        {
+          "column": "N",
+          "width": 21.0
+        }
+      ]
+    },
+    {
+      "name": "Admin_Logs",
+      "cells": [
+        {
+          "address": "A1",
+          "type": "text",
+          "value": "Horodatage"
+        },
+        {
+          "address": "B1",
+          "type": "text",
+          "value": "Utilisateur"
+        },
+        {
+          "address": "C1",
+          "type": "text",
+          "value": "Action"
+        },
+        {
+          "address": "D1",
+          "type": "text",
+          "value": "Cible"
+        },
+        {
+          "address": "E1",
+          "type": "text",
+          "value": "SessionWindows"
+        }
+      ],
+      "tables": [
+        {
+          "name": "Logs",
+          "range": "A1:E1",
+          "nativeRange": "A1:E2",
+          "dataRows": 0,
+          "headers": [
+            "Horodatage",
+            "Utilisateur",
+            "Action",
+            "Cible",
+            "SessionWindows"
+          ]
+        }
+      ],
+      "widths": [
+        {
+          "column": "A",
+          "width": 21.0
+        },
+        {
+          "column": "B",
+          "width": 21.0
+        },
+        {
+          "column": "C",
+          "width": 21.0
+        },
+        {
+          "column": "D",
+          "width": 21.0
+        },
+        {
+          "column": "E",
+          "width": 21.0
+        },
+        {
+          "column": "F",
+          "width": 21.0
+        },
+        {
+          "column": "G",
+          "width": 21.0
+        },
+        {
+          "column": "H",
+          "width": 21.0
+        },
+        {
+          "column": "I",
+          "width": 21.0
+        },
+        {
+          "column": "J",
+          "width": 21.0
+        },
+        {
+          "column": "K",
+          "width": 21.0
+        },
+        {
+          "column": "L",
+          "width": 21.0
+        },
+        {
+          "column": "M",
+          "width": 21.0
+        },
+        {
+          "column": "N",
+          "width": 21.0
+        }
+      ]
+    },
+    {
+      "name": "Competences",
+      "cells": [
+        {
+          "address": "A1",
+          "type": "text",
+          "value": "Identifiant"
+        },
+        {
+          "address": "B1",
+          "type": "text",
+          "value": "Matricule"
+        },
+        {
+          "address": "C1",
+          "type": "text",
+          "value": "Competence"
+        },
+        {
+          "address": "D1",
+          "type": "text",
+          "value": "Niveau"
+        },
+        {
+          "address": "E1",
+          "type": "text",
+          "value": "Date"
+        }
+      ],
+      "tables": [
+        {
+          "name": "Competences",
+          "range": "A1:E1",
+          "nativeRange": "A1:E2",
+          "dataRows": 0,
+          "headers": [
+            "Identifiant",
+            "Matricule",
+            "Competence",
+            "Niveau",
+            "Date"
+          ]
+        }
+      ],
+      "widths": [
+        {
+          "column": "A",
+          "width": 21.0
+        },
+        {
+          "column": "B",
+          "width": 21.0
+        },
+        {
+          "column": "C",
+          "width": 21.0
+        },
+        {
+          "column": "D",
+          "width": 21.0
+        },
+        {
+          "column": "E",
+          "width": 21.0
+        },
+        {
+          "column": "F",
+          "width": 21.0
+        },
+        {
+          "column": "G",
+          "width": 21.0
+        },
+        {
+          "column": "H",
+          "width": 21.0
+        },
+        {
+          "column": "I",
+          "width": 21.0
+        },
+        {
+          "column": "J",
+          "width": 21.0
+        },
+        {
+          "column": "K",
+          "width": 21.0
+        },
+        {
+          "column": "L",
+          "width": 21.0
+        },
+        {
+          "column": "M",
+          "width": 21.0
+        },
+        {
+          "column": "N",
+          "width": 21.0
+        }
+      ]
+    },
+    {
+      "name": "Entretiens",
+      "cells": [
+        {
+          "address": "A1",
+          "type": "text",
+          "value": "Identifiant"
+        },
+        {
+          "address": "B1",
+          "type": "text",
+          "value": "Matricule"
+        },
+        {
+          "address": "C1",
+          "type": "text",
+          "value": "Date"
+        },
+        {
+          "address": "D1",
+          "type": "text",
+          "value": "Remarques"
+        },
+        {
+          "address": "E1",
+          "type": "text",
+          "value": "Auteur"
+        }
+      ],
+      "tables": [
+        {
+          "name": "Entretiens",
+          "range": "A1:E1",
+          "nativeRange": "A1:E2",
+          "dataRows": 0,
+          "headers": [
+            "Identifiant",
+            "Matricule",
+            "Date",
+            "Remarques",
+            "Auteur"
+          ]
+        }
+      ],
+      "widths": [
+        {
+          "column": "A",
+          "width": 21.0
+        },
+        {
+          "column": "B",
+          "width": 21.0
+        },
+        {
+          "column": "C",
+          "width": 21.0
+        },
+        {
+          "column": "D",
+          "width": 21.0
+        },
+        {
+          "column": "E",
+          "width": 21.0
+        },
+        {
+          "column": "F",
+          "width": 21.0
+        },
+        {
+          "column": "G",
+          "width": 21.0
+        },
+        {
+          "column": "H",
+          "width": 21.0
+        },
+        {
+          "column": "I",
+          "width": 21.0
+        },
+        {
+          "column": "J",
+          "width": 21.0
+        },
+        {
+          "column": "K",
+          "width": 21.0
+        },
+        {
+          "column": "L",
+          "width": 21.0
+        },
+        {
+          "column": "M",
+          "width": 21.0
+        },
+        {
+          "column": "N",
+          "width": 21.0
+        }
+      ]
+    },
+    {
+      "name": "Parametres",
+      "cells": [
+        {
+          "address": "A1",
+          "type": "text",
+          "value": "Cle"
+        },
+        {
+          "address": "B1",
+          "type": "text",
+          "value": "Valeur"
+        },
+        {
+          "address": "D1",
+          "type": "text",
+          "value": "Categorie"
+        },
+        {
+          "address": "E1",
+          "type": "text",
+          "value": "Valeur"
+        },
+        {
+          "address": "G1",
+          "type": "text",
+          "value": "Date"
+        },
+        {
+          "address": "H1",
+          "type": "text",
+          "value": "Libelle"
+        },
+        {
+          "address": "J1",
+          "type": "text",
+          "value": "Poste"
+        },
+        {
+          "address": "K1",
+          "type": "text",
+          "value": "Competence"
+        },
+        {
+          "address": "L1",
+          "type": "text",
+          "value": "NiveauCible"
+        },
+        {
+          "address": "N1",
+          "type": "text",
+          "value": "Modele"
+        },
+        {
+          "address": "O1",
+          "type": "text",
+          "value": "Texte"
+        },
+        {
+          "address": "A2",
+          "type": "text",
+          "value": "Entreprise"
+        },
+        {
+          "address": "B2",
+          "type": "text",
+          "value": "Entreprise Démonstration"
+        },
+        {
+          "address": "D2",
+          "type": "text",
+          "value": "Service"
+        },
+        {
+          "address": "E2",
+          "type": "text",
+          "value": "Direction"
+        },
+        {
+          "address": "G2",
+          "type": "date",
+          "value": "2026-01-01"
+        },
+        {
+          "address": "H2",
+          "type": "text",
+          "value": "Exemple France 2026"
+        },
+        {
+          "address": "J2",
+          "type": "text",
+          "value": "Comptable"
+        },
+        {
+          "address": "K2",
+          "type": "text",
+          "value": "Excel"
+        },
+        {
+          "address": "L2",
+          "type": "text",
+          "value": "Expert"
+        },
+        {
+          "address": "N2",
+          "type": "text",
+          "value": "Contrat"
+        },
+        {
+          "address": "O2",
+          "type": "text",
+          "value": "BROUILLON À VALIDER JURIDIQUEMENT\nCONTRAT DE TRAVAIL\n\nEntre [Entreprise] et [Prenom] [Nom].\nType : [Contrat]. Poste : [Poste].\nDate d’embauche : [Embauche]. Salaire brut : [Salaire] (devise et périodicité à préciser).\n\nCe modèle ne constitue pas un contrat complet : compléter convention collective, durée du travail, lieu, période d’essai, clauses et signatures.\nÉtabli le [Date]."
+        },
+        {
+          "address": "A3",
+          "type": "text",
+          "value": "AcquisitionMensuelle"
+        },
+        {
+          "address": "B3",
+          "type": "number",
+          "value": 2.5
+        },
+        {
+          "address": "D3",
+          "type": "text",
+          "value": "Service"
+        },
+        {
+          "address": "E3",
+          "type": "text",
+          "value": "Finance"
+        },
+        {
+          "address": "G3",
+          "type": "date",
+          "value": "2026-04-06"
+        },
+        {
+          "address": "H3",
+          "type": "text",
+          "value": "Exemple France 2026"
+        },
+        {
+          "address": "J3",
+          "type": "text",
+          "value": "Comptable"
+        },
+        {
+          "address": "K3",
+          "type": "text",
+          "value": "Sage"
+        },
+        {
+          "address": "L3",
+          "type": "text",
+          "value": "Intermédiaire"
+        },
+        {
+          "address": "N3",
+          "type": "text",
+          "value": "Avenant"
+        },
+        {
+          "address": "O3",
+          "type": "text",
+          "value": "BROUILLON À VALIDER JURIDIQUEMENT\nAVENANT\n\n[Entreprise] / [Prenom] [Nom]\nPoste actuel : [Poste]. Salaire brut actuel : [Salaire].\nCompléter la modification, sa date d’effet et les clauses inchangées avant signature.\nÉtabli le [Date]."
+        },
+        {
+          "address": "A4",
+          "type": "text",
+          "value": "ModeJours"
+        },
+        {
+          "address": "B4",
+          "type": "text",
+          "value": "Ouvres"
+        },
+        {
+          "address": "D4",
+          "type": "text",
+          "value": "Service"
+        },
+        {
+          "address": "E4",
+          "type": "text",
+          "value": "Ressources humaines"
+        },
+        {
+          "address": "G4",
+          "type": "date",
+          "value": "2026-05-01"
+        },
+        {
+          "address": "H4",
+          "type": "text",
+          "value": "Exemple France 2026"
+        },
+        {
+          "address": "J4",
+          "type": "text",
+          "value": "Comptable"
+        },
+        {
+          "address": "K4",
+          "type": "text",
+          "value": "Compta Générale"
+        },
+        {
+          "address": "L4",
+          "type": "text",
+          "value": "Expert"
+        },
+        {
+          "address": "N4",
+          "type": "text",
+          "value": "Certificat"
+        },
+        {
+          "address": "O4",
+          "type": "text",
+          "value": "BROUILLON À VALIDER\nCERTIFICAT DE TRAVAIL\n\n[Entreprise] certifie avoir employé [Prenom] [Nom] du [Embauche] au [Sortie] au poste de [Poste].\nCompléter les mentions légales applicables et la signature du représentant.\nÉtabli le [Date]."
+        },
+        {
+          "address": "A5",
+          "type": "text",
+          "value": "DebutExercice"
+        },
+        {
+          "address": "B5",
+          "type": "text",
+          "value": "01/01/2026"
+        },
+        {
+          "address": "D5",
+          "type": "text",
+          "value": "Service"
+        },
+        {
+          "address": "E5",
+          "type": "text",
+          "value": "Informatique"
+        },
+        {
+          "address": "G5",
+          "type": "date",
+          "value": "2026-05-08"
+        },
+        {
+          "address": "H5",
+          "type": "text",
+          "value": "Exemple France 2026"
+        },
+        {
+          "address": "J5",
+          "type": "text",
+          "value": "Développeur"
+        },
+        {
+          "address": "K5",
+          "type": "text",
+          "value": "VBA"
+        },
+        {
+          "address": "L5",
+          "type": "text",
+          "value": "Expert"
+        },
+        {
+          "address": "N5",
+          "type": "text",
+          "value": "Attestation"
+        },
+        {
+          "address": "O5",
+          "type": "text",
+          "value": "BROUILLON À VALIDER\nATTESTATION\n\n[Entreprise] atteste que [Prenom] [Nom] a été embauché(e) le [Embauche] au poste de [Poste].\nCompléter l’objet et vérifier la situation actuelle avant signature.\nÉtabli le [Date]."
+        },
+        {
+          "address": "A6",
+          "type": "text",
+          "value": "CouleurMarine"
+        },
+        {
+          "address": "B6",
+          "type": "number",
+          "value": 5123348
+        },
+        {
+          "address": "D6",
+          "type": "text",
+          "value": "Poste"
+        },
+        {
+          "address": "E6",
+          "type": "text",
+          "value": "Directeur"
+        },
+        {
+          "address": "G6",
+          "type": "date",
+          "value": "2026-05-14"
+        },
+        {
+          "address": "H6",
+          "type": "text",
+          "value": "Exemple France 2026"
+        },
+        {
+          "address": "J6",
+          "type": "text",
+          "value": "Responsable RH"
+        },
+        {
+          "address": "K6",
+          "type": "text",
+          "value": "Excel"
+        },
+        {
+          "address": "L6",
+          "type": "text",
+          "value": "Intermédiaire"
+        },
+        {
+          "address": "A7",
+          "type": "text",
+          "value": "DossierExports"
+        },
+        {
+          "address": "D7",
+          "type": "text",
+          "value": "Poste"
+        },
+        {
+          "address": "E7",
+          "type": "text",
+          "value": "Comptable"
+        },
+        {
+          "address": "G7",
+          "type": "date",
+          "value": "2026-05-25"
+        },
+        {
+          "address": "H7",
+          "type": "text",
+          "value": "Exemple France 2026"
+        },
+        {
+          "address": "J7",
+          "type": "text",
+          "value": "Directeur"
+        },
+        {
+          "address": "K7",
+          "type": "text",
+          "value": "Management"
+        },
+        {
+          "address": "L7",
+          "type": "text",
+          "value": "Expert"
+        },
+        {
+          "address": "A8",
+          "type": "text",
+          "value": "Protection"
+        },
+        {
+          "address": "B8",
+          "type": "text",
+          "value": "INSTALLATION"
+        },
+        {
+          "address": "D8",
+          "type": "text",
+          "value": "Poste"
+        },
+        {
+          "address": "E8",
+          "type": "text",
+          "value": "Responsable RH"
+        },
+        {
+          "address": "G8",
+          "type": "date",
+          "value": "2026-07-14"
+        },
+        {
+          "address": "H8",
+          "type": "text",
+          "value": "Exemple France 2026"
+        },
+        {
+          "address": "A9",
+          "type": "text",
+          "value": "CompteurSalaries"
+        },
+        {
+          "address": "B9",
+          "type": "number",
+          "value": 5
+        },
+        {
+          "address": "D9",
+          "type": "text",
+          "value": "Poste"
+        },
+        {
+          "address": "E9",
+          "type": "text",
+          "value": "Développeur"
+        },
+        {
+          "address": "G9",
+          "type": "date",
+          "value": "2026-08-15"
+        },
+        {
+          "address": "H9",
+          "type": "text",
+          "value": "Exemple France 2026"
+        },
+        {
+          "address": "A10",
+          "type": "text",
+          "value": "CompteurConges"
+        },
+        {
+          "address": "B10",
+          "type": "number",
+          "value": 0
+        },
+        {
+          "address": "D10",
+          "type": "text",
+          "value": "Contrat"
+        },
+        {
+          "address": "E10",
+          "type": "text",
+          "value": "CDI"
+        },
+        {
+          "address": "G10",
+          "type": "date",
+          "value": "2026-11-01"
+        },
+        {
+          "address": "H10",
+          "type": "text",
+          "value": "Exemple France 2026"
+        },
+        {
+          "address": "A11",
+          "type": "text",
+          "value": "CompteurEntretiens"
+        },
+        {
+          "address": "B11",
+          "type": "number",
+          "value": 0
+        },
+        {
+          "address": "D11",
+          "type": "text",
+          "value": "Contrat"
+        },
+        {
+          "address": "E11",
+          "type": "text",
+          "value": "CDD"
+        },
+        {
+          "address": "G11",
+          "type": "date",
+          "value": "2026-11-11"
+        },
+        {
+          "address": "H11",
+          "type": "text",
+          "value": "Exemple France 2026"
+        },
+        {
+          "address": "D12",
+          "type": "text",
+          "value": "Contrat"
+        },
+        {
+          "address": "E12",
+          "type": "text",
+          "value": "Intérim"
+        },
+        {
+          "address": "G12",
+          "type": "date",
+          "value": "2026-12-25"
+        },
+        {
+          "address": "H12",
+          "type": "text",
+          "value": "Exemple France 2026"
+        },
+        {
+          "address": "D13",
+          "type": "text",
+          "value": "Motif"
+        },
+        {
+          "address": "E13",
+          "type": "text",
+          "value": "Démission"
+        },
+        {
+          "address": "D14",
+          "type": "text",
+          "value": "Motif"
+        },
+        {
+          "address": "E14",
+          "type": "text",
+          "value": "Licenciement"
+        },
+        {
+          "address": "D15",
+          "type": "text",
+          "value": "Motif"
+        },
+        {
+          "address": "E15",
+          "type": "text",
+          "value": "Retraite"
+        },
+        {
+          "address": "D16",
+          "type": "text",
+          "value": "Motif"
+        },
+        {
+          "address": "E16",
+          "type": "text",
+          "value": "Fin de CDD"
+        },
+        {
+          "address": "D17",
+          "type": "text",
+          "value": "Conge"
+        },
+        {
+          "address": "E17",
+          "type": "text",
+          "value": "Payé"
+        },
+        {
+          "address": "D18",
+          "type": "text",
+          "value": "Conge"
+        },
+        {
+          "address": "E18",
+          "type": "text",
+          "value": "Sans solde"
+        },
+        {
+          "address": "D19",
+          "type": "text",
+          "value": "Conge"
+        },
+        {
+          "address": "E19",
+          "type": "text",
+          "value": "RTT"
+        },
+        {
+          "address": "D20",
+          "type": "text",
+          "value": "Conge"
+        },
+        {
+          "address": "E20",
+          "type": "text",
+          "value": "Maladie"
+        }
+      ],
+      "tables": [
+        {
+          "name": "Configuration",
+          "range": "A1:B11",
+          "nativeRange": "A1:B11",
+          "dataRows": 10,
+          "headers": [
+            "Cle",
+            "Valeur"
+          ]
+        },
+        {
+          "name": "References",
+          "range": "D1:E20",
+          "nativeRange": "D1:E20",
+          "dataRows": 19,
+          "headers": [
+            "Categorie",
+            "Valeur"
+          ]
+        },
+        {
+          "name": "Feries",
+          "range": "G1:H12",
+          "nativeRange": "G1:H12",
+          "dataRows": 11,
+          "headers": [
+            "Date",
+            "Libelle"
+          ]
+        },
+        {
+          "name": "Grille",
+          "range": "J1:L7",
+          "nativeRange": "J1:L7",
+          "dataRows": 6,
+          "headers": [
+            "Poste",
+            "Competence",
+            "NiveauCible"
+          ]
+        },
+        {
+          "name": "Modeles",
+          "range": "N1:O5",
+          "nativeRange": "N1:O5",
+          "dataRows": 4,
+          "headers": [
+            "Modele",
+            "Texte"
+          ]
+        }
+      ],
+      "widths": [
+        {
+          "column": "A",
+          "width": 21.0
+        },
+        {
+          "column": "B",
+          "width": 21.0
+        },
+        {
+          "column": "C",
+          "width": 21.0
+        },
+        {
+          "column": "D",
+          "width": 21.0
+        },
+        {
+          "column": "E",
+          "width": 21.0
+        },
+        {
+          "column": "F",
+          "width": 21.0
+        },
+        {
+          "column": "G",
+          "width": 21.0
+        },
+        {
+          "column": "H",
+          "width": 21.0
+        },
+        {
+          "column": "I",
+          "width": 21.0
+        },
+        {
+          "column": "J",
+          "width": 21.0
+        },
+        {
+          "column": "K",
+          "width": 21.0
+        },
+        {
+          "column": "L",
+          "width": 21.0
+        },
+        {
+          "column": "M",
+          "width": 21.0
+        },
+        {
+          "column": "N",
+          "width": 21.0
+        },
+        {
+          "column": "O",
+          "width": 21.0
+        }
+      ]
+    },
+    {
+      "name": "Documents",
+      "cells": [],
+      "tables": [],
+      "widths": [
+        {
+          "column": "A",
+          "width": 21.0
+        },
+        {
+          "column": "B",
+          "width": 21.0
+        },
+        {
+          "column": "C",
+          "width": 21.0
+        },
+        {
+          "column": "D",
+          "width": 21.0
+        },
+        {
+          "column": "E",
+          "width": 21.0
+        },
+        {
+          "column": "F",
+          "width": 21.0
+        },
+        {
+          "column": "G",
+          "width": 21.0
+        },
+        {
+          "column": "H",
+          "width": 21.0
+        },
+        {
+          "column": "I",
+          "width": 21.0
+        },
+        {
+          "column": "J",
+          "width": 21.0
+        },
+        {
+          "column": "K",
+          "width": 21.0
+        },
+        {
+          "column": "L",
+          "width": 21.0
+        },
+        {
+          "column": "M",
+          "width": 21.0
+        },
+        {
+          "column": "N",
+          "width": 21.0
+        }
+      ]
+    },
+    {
+      "name": "Dashboard_Stat",
+      "cells": [],
+      "tables": [],
+      "widths": [
+        {
+          "column": "A",
+          "width": 21.0
+        },
+        {
+          "column": "B",
+          "width": 21.0
+        },
+        {
+          "column": "C",
+          "width": 21.0
+        },
+        {
+          "column": "D",
+          "width": 21.0
+        },
+        {
+          "column": "E",
+          "width": 21.0
+        },
+        {
+          "column": "F",
+          "width": 21.0
+        },
+        {
+          "column": "G",
+          "width": 21.0
+        },
+        {
+          "column": "H",
+          "width": 21.0
+        },
+        {
+          "column": "I",
+          "width": 21.0
+        },
+        {
+          "column": "J",
+          "width": 21.0
+        },
+        {
+          "column": "K",
+          "width": 21.0
+        },
+        {
+          "column": "L",
+          "width": 21.0
+        },
+        {
+          "column": "M",
+          "width": 21.0
+        },
+        {
+          "column": "N",
+          "width": 21.0
+        }
+      ]
+    }
+  ]
+}

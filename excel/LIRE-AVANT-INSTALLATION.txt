@@ -1,0 +1,39 @@
+GESTIONNAIRE RH - KIT DE CREATION DU CLASSEUR EXCEL - CORRECTIF 1.0.1
+
+Le constructeur ne charge plus GestionnaireRH-modele.xlsx. Il cree un
+classeur vierge et ses tables directement dans Excel a partir de
+tools\workbook-data.json. Cela evite l'erreur de recuperation de l'ancien
+modele. Extrayez cette version dans un NOUVEAU dossier, sans melanger les kits.
+Le modele XLSX est desormais un apercu sans macros ni tables structurees.
+
+Cette archive contient les sources et le modele, PAS un XLSM deja compile.
+Windows et Excel de bureau 2016 ou plus recent sont indispensables.
+Excel Online, un telephone ou un Mac ne permettent pas cet assemblage.
+
+1. Extraire TOUTE l'archive dans un dossier local, par exemple Documents\RH.
+   Ne pas lancer les fichiers directement a l'interieur du ZIP.
+2. Lire docs\Manuel-utilisateur.pdf, en particulier les pages 2 et 3.
+3. Dans Excel : Fichier > Options > Centre de gestion de la confidentialite
+   > Parametres du Centre > Parametres des macros : autoriser temporairement
+   l'acces approuve au modele d'objet du projet VBA.
+   Fermer Excel. Ne pas activer toutes les macros sans distinction.
+4. Double-cliquer Creer-le-classeur.cmd dans le dossier extrait.
+   Choisir le mot de passe initial admin (12 caracteres minimum).
+   La saisie du mot de passe est masquee : c'est normal.
+5. Le resultat est livraison\GestionnaireRH.xlsm.
+   Aucun fichier existant n'est ecrase : le constructeur s'arrete si ce nom existe.
+6. Ouvrir le resultat dans Excel. Apres revue des sources, autoriser ses macros.
+   Alt+F11 > Debogage > Compiler VBAProject.
+   Se connecter comme admin, puis Alt+F8 > RunSmokeTests sur la demonstration.
+   Effectuer aussi les tests de docs\recette.md.
+7. Verrouiller manuellement le projet VBA et chiffrer le classeur selon le manuel.
+   Desactiver ensuite l'acces approuve au modele objet VBA.
+
+Le constructeur n'a pas pu etre execute dans l'environnement Linux de preparation.
+Compilation, fonctionnement Excel et performances ne sont donc pas certifies.
+Les cinq salaries sont fictifs. Ne pas saisir de donnees RH reelles avant recette
+et securisation. Le login VBA et les feuilles masquees ne suffisent pas a garantir
+la confidentialite du contenu du fichier.
+
+Si la politique de votre entreprise interdit les scripts ou les macros,
+contacter le service informatique au lieu de desactiver ses protections.

@@ -1,0 +1,5 @@
+*.pdf binary
+*.xlsx binary
+*.xlsm binary
+*.zip binary
+*.cmd text eol=crlf
