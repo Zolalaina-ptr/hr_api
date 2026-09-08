@@ -1,0 +1,3 @@
+<?php
+namespace App\Models; use Illuminate\Database\Eloquent\Model; use Illuminate\Database\Eloquent\Relations\BelongsTo;
+class Payroll extends Model { protected $fillable=['employee_id','period_month','period_year','base_salary','overtime_pay','bonuses','benefits_in_kind','social_security_employee','social_security_employer','taxes','gross_pay','net_pay','status','payment_date','payment_reference']; protected $casts=['payment_date'=>'date']; public function employee(): BelongsTo{return $this->belongsTo(Employee::class);} }

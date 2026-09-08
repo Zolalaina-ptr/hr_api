@@ -1,0 +1,4 @@
+<?php
+namespace App\Jobs;
+use App\Models\{Employee,Payroll}; use Illuminate\Bus\Queueable; use Illuminate\Contracts\Queue\ShouldQueue; use Illuminate\Foundation\Bus\Dispatchable; use Illuminate\Queue\InteractsWithQueue; use Illuminate\Queue\SerializesModels;
+class GeneratePayrollJob implements ShouldQueue {use Dispatchable,InteractsWithQueue,Queueable,SerializesModels; public function __construct(public int $employeeId,public int $month,public int $year){} public function handle():void{$e=Employee::findOrFail($this->employeeId);$base=(float)$e->base_salary;$gross=$base;$employeeCharge=round($gross*.01,2);$tax=round($gross*.05,2);Payroll::updateOrCreate(['employee_id'=>$e->id,'period_month'=>$this->month,'period_year'=>$this->year],['base_salary'=>$base,'gross_pay'=>$gross,'social_security_employee'=>$employeeCharge,'taxes'=>$tax,'net_pay'=>$gross-$employeeCharge-$tax,'status'=>'generated']);}}

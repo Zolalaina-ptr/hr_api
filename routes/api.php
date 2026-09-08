@@ -3,16 +3,19 @@
 use App\Http\Controllers\Api\AttendanceController;
 use App\Http\Controllers\Api\AuthController;
 use App\Http\Controllers\Api\DepartmentController;
+use App\Http\Controllers\Api\EmployeeController;
 use App\Http\Controllers\Api\LeaveController;
 use App\Http\Controllers\Api\PositionController;
 use Illuminate\Support\Facades\Route;
 
-Route::post('/register', [AuthController::class, 'register']);
-Route::post('/login', [AuthController::class, 'login']);
+Route::middleware('throttle:auth')->group(function () {
+    Route::post('/register', [AuthController::class, 'register']);
+    Route::post('/login', [AuthController::class, 'login']);
+});
 Route::post('/forgot-password', [AuthController::class, 'forgotPassword']);
 Route::post('/reset-password', [AuthController::class, 'resetPassword']);
 
-Route::middleware('auth:sanctum')->group(function () {
+Route::middleware(['auth:sanctum', 'throttle:api'])->group(function () {
     Route::get('/me', [AuthController::class, 'me']);
     Route::post('/logout', [AuthController::class, 'logout']);
     Route::post('/refresh', [AuthController::class, 'refresh']);
@@ -81,6 +84,25 @@ Route::middleware('auth:sanctum')->group(function () {
         Route::delete('/positions/{position}', [PositionController::class, 'destroy']);
     });
 
+    // Phase 11: Employees routes
+    Route::middleware('permission:view employees')->group(function () {
+        Route::get('/employees', [EmployeeController::class, 'index']);
+        Route::get('/employees/{employee}', [EmployeeController::class, 'show']);
+        Route::get('/employees/{employee}/history', [EmployeeController::class, 'history']);
+    });
+
+    Route::middleware('permission:create employees')->group(function () {
+        Route::post('/employees', [EmployeeController::class, 'store']);
+    });
+
+    Route::middleware('permission:update employees')->group(function () {
+        Route::put('/employees/{employee}', [EmployeeController::class, 'update']);
+    });
+
+    Route::middleware('permission:delete employees')->group(function () {
+        Route::delete('/employees/{employee}', [EmployeeController::class, 'destroy']);
+    });
+
     // Phase 5: Attendance routes
     Route::middleware('permission:view attendance|manage attendance')->group(function () {
         Route::get('/attendances', [AttendanceController::class, 'index']);
@@ -107,6 +129,45 @@ Route::middleware('auth:sanctum')->group(function () {
     Route::middleware('permission:delete attendance')->group(function () {
         Route::delete('/attendances/{attendance}', [AttendanceController::class, 'destroy']);
     });
+
+    // Phase 10: Dashboard and reporting
+    Route::prefix('dashboard')->group(function () {
+        Route::get('/statistics', [\App\Http\Controllers\Api\DashboardController::class, 'statistics']);
+        Route::get('/headcount', [\App\Http\Controllers\Api\DashboardController::class, 'headcount']);
+        Route::get('/attendance', [\App\Http\Controllers\Api\DashboardController::class, 'attendance']);
+        Route::get('/demographics', [\App\Http\Controllers\Api\DashboardController::class, 'demographics']);
+    });
+
+    // Phase 9: Notifications
+    Route::prefix('notifications')->group(function () {
+        Route::get('/', [\App\Http\Controllers\Api\NotificationController::class, 'index']);
+        Route::get('/unread', [\App\Http\Controllers\Api\NotificationController::class, 'unread']);
+        Route::patch('/read-all', [\App\Http\Controllers\Api\NotificationController::class, 'markAllRead']);
+        Route::patch('/{notification}/read', [\App\Http\Controllers\Api\NotificationController::class, 'markAsRead']);
+        Route::delete('/{notification}', [\App\Http\Controllers\Api\NotificationController::class, 'destroy']);
+    });
+
+    // Phase 8: Contracts and payroll routes
+    Route::middleware('permission:view contracts|manage contracts')->group(function () { Route::get('/contracts',[\App\Http\Controllers\Api\ContractController::class,'index']); Route::get('/contracts/expiring',[\App\Http\Controllers\Api\ContractController::class,'expiring']); Route::get('/contracts/employee/{employee}',[\App\Http\Controllers\Api\ContractController::class,'employee']); Route::get('/contracts/{contract}',[\App\Http\Controllers\Api\ContractController::class,'show']); });
+    Route::middleware('permission:create contracts')->post('/contracts',[\App\Http\Controllers\Api\ContractController::class,'store']);
+    Route::middleware('permission:update contracts|manage contracts')->group(function(){Route::put('/contracts/{contract}',[\App\Http\Controllers\Api\ContractController::class,'update']);Route::delete('/contracts/{contract}',[\App\Http\Controllers\Api\ContractController::class,'destroy']);});
+    Route::middleware('permission:view payroll|manage payroll')->group(function(){Route::get('/payrolls',[\App\Http\Controllers\Api\PayrollController::class,'index']);Route::get('/payrolls/export',[\App\Http\Controllers\Api\PayrollController::class,'export']);Route::get('/payrolls/employee/{employee}',[\App\Http\Controllers\Api\PayrollController::class,'employee']);Route::get('/payrolls/{payroll}',[\App\Http\Controllers\Api\PayrollController::class,'show']);});
+    Route::middleware('permission:create payroll')->post('/payrolls',[\App\Http\Controllers\Api\PayrollController::class,'store']);
+    Route::middleware('permission:update payroll|manage payroll')->group(function(){Route::patch('/payrolls/{payroll}/validate',[\App\Http\Controllers\Api\PayrollController::class,'validatePayroll']);Route::patch('/payrolls/{payroll}/pay',[\App\Http\Controllers\Api\PayrollController::class,'pay']);});
+
+    // Phase 7: Evaluations routes
+    Route::middleware('permission:view evaluations|manage evaluations')->group(function () {
+        Route::get('/evaluations', [\App\Http\Controllers\Api\EvaluationController::class, 'index']);
+        Route::get('/evaluations/upcoming', [\App\Http\Controllers\Api\EvaluationController::class, 'upcoming']);
+        Route::get('/evaluations/employee/{employee}', [\App\Http\Controllers\Api\EvaluationController::class, 'employee']);
+        Route::get('/evaluations/{evaluation}', [\App\Http\Controllers\Api\EvaluationController::class, 'show']);
+    });
+    Route::middleware('permission:create evaluations')->post('/evaluations', [\App\Http\Controllers\Api\EvaluationController::class, 'store']);
+    Route::middleware('permission:update evaluations|manage evaluations')->group(function () {
+        Route::put('/evaluations/{evaluation}', [\App\Http\Controllers\Api\EvaluationController::class, 'update']);
+        Route::patch('/evaluations/{evaluation}/validate', [\App\Http\Controllers\Api\EvaluationController::class, 'validateEvaluation']);
+    });
+    Route::middleware('permission:delete evaluations')->delete('/evaluations/{evaluation}', [\App\Http\Controllers\Api\EvaluationController::class, 'destroy']);
 
     // Phase 6: Leave routes
     Route::middleware('permission:view leaves|manage leaves')->group(function () {

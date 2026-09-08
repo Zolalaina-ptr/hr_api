@@ -22,6 +22,9 @@ class PermissionSeeder extends Seeder
             'attendance',
             'payroll',
             'leaves',
+            'evaluations',
+            'contracts',
+            'payroll',
         ];
 
         $actions = ['view', 'create', 'update', 'delete'];
@@ -54,6 +57,11 @@ class PermissionSeeder extends Seeder
 
         Permission::firstOrCreate([
             'name' => 'manage leaves',
+            'guard_name' => 'web',
+        ]);
+
+        Permission::firstOrCreate([
+            'name' => 'manage evaluations',
             'guard_name' => 'web',
         ]);
     }

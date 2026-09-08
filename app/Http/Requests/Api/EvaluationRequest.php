@@ -1,0 +1,4 @@
+<?php
+namespace App\Http\Requests\Api;
+use Illuminate\Foundation\Http\FormRequest;
+class EvaluationRequest extends FormRequest { public function authorize(): bool{return true;} public function rules(): array{return ['employee_id'=>'required|exists:employees,id','evaluation_date'=>'required|date','period_start'=>'required|date','period_end'=>'required|date|after_or_equal:period_start','skills_score'=>'nullable|numeric|between:1,5','soft_skills_score'=>'nullable|numeric|between:1,5','management_score'=>'nullable|numeric|between:1,5','autonomy_score'=>'nullable|numeric|between:1,5','results_score'=>'nullable|numeric|between:1,5','comments'=>'nullable|string','goals'=>'nullable|string','strengths'=>'nullable|string','areas_for_improvement'=>'nullable|string','status'=>'nullable|in:planned,in_progress,completed,cancelled','feedback'=>'nullable|string','next_evaluation_date'=>'nullable|date'];} }
