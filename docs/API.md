@@ -44,6 +44,32 @@ Les listes acceptent généralement `page`, `per_page` et les filtres propres au
 
 `GET /api/employees/{id}/history` renvoie l'historique des changements de poste et de salaire (paginé). `DELETE /api/employees/{id}` effectue une suppression douce (soft delete).
 
+## Remplacements de congé (`/api/leaves/{id}/replacements`)
+
+Un remplacement désigne un collègue qui couvre un congé donné. Les permissions
+sont celles du module `leaves` (`view|create|update|delete|manage leaves`).
+
+| Méthode | Route | Description |
+|---|---|---|
+| GET | `/api/leaves/{leave}/replacements` | Liste des remplacements du congé (filtre `status`) |
+| POST | `/api/leaves/{leave}/replacements` | Demander un remplacement |
+| GET | `/api/replacements/{replacement}` | Détail d'un remplacement |
+| PATCH | `/api/replacements/{replacement}/accept` | Accepter (depuis `pending` uniquement) |
+| PATCH | `/api/replacements/{replacement}/decline` | Refuser, `reason` optionnel (depuis `pending` uniquement) |
+| DELETE | `/api/replacements/{replacement}` | Annuler (`pending` ou `accepted`) |
+
+Corps de la création : `replacement_employee_id` (obligatoire, différent de
+l'employé du congé), `start_date`/`end_date` (optionnels, période du congé par
+défaut), `responsibilities` (optionnel, max 2000). `original_employee_id` est
+déduit du congé, `requested_by` vaut l'utilisateur courant et le statut initial
+est `pending`. Une erreur métier (HTTP 422) est renvoyée si un remplacement
+`accepted` existe déjà pour le congé.
+
+Machine à états : `pending → accepted | declined | cancelled`,
+`accepted → cancelled` ; `declined` et `cancelled` sont terminaux. Les
+transitions invalides renvoient une erreur métier HTTP 422
+(`BusinessRuleException`).
+
 Les réponses utilisent le format standard :
 
 ```json
