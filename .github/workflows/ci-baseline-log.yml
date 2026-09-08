@@ -60,16 +60,18 @@ jobs:
         env:
           GH_TOKEN: ${{ github.token }}
         run: |
+          set +e
           API="https://api.github.com/repos/${GITHUB_REPOSITORY}/issues/2/comments"
           post() { # $1 = markdown file
-            jq -n --rawfile body "$1" '{body: $body}' > /tmp/payload.json
+            jq -n --rawfile body "$1" '{body: $body}' > /tmp/payload.json 2>/dev/null
+            if [ $? -ne 0 ]; then echo "jq failed on $1"; return 1; fi
             curl -s -o /tmp/resp.json -w "%{http_code}" -X POST \
               -H "Authorization: Bearer ${GH_TOKEN}" \
               -H "Accept: application/vnd.github+json" \
               --data @/tmp/payload.json "$API"
           }
           LOG=/tmp/ci-test.log
-          tail -c 200000 "$LOG" > /tmp/ci-test-tail.log
+          tail -c 200000 "$LOG" 2>/dev/null | tr -d '\000' | iconv -f UTF-8 -t UTF-8 -c > /tmp/ci-test-tail.log
           SIZE=$(wc -c < /tmp/ci-test-tail.log)
           CHUNK=60000
           TOTAL_FULL=$(( (SIZE + CHUNK - 1) / CHUNK ))
