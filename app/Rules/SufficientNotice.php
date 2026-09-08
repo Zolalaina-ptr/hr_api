@@ -32,10 +32,12 @@ class SufficientNotice implements Rule
         }
 
         $minNotice = (int) $leaveType->min_days_notice;
-        $start = Carbon::parse($this->startDate);
-        $diffDays = $start->diffInDays(now());
+        $start = Carbon::parse($this->startDate)->startOfDay();
 
-        return $diffDays >= $minNotice;
+        // Carbon 3 diffInDays() is signed: future start date => positive value
+        $daysUntilStart = now()->startOfDay()->diffInDays($start);
+
+        return $daysUntilStart >= $minNotice;
     }
 
     public function message(): string

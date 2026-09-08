@@ -212,10 +212,13 @@ class PayrollApiTest extends TestCase
 
         Sanctum::actingAs($this->adminUser);
 
+        \Illuminate\Support\Facades\DB::enableQueryLog();
         $response = $this->patchJson("/api/payrolls/{$payroll->id}/validate");
+        $queries = \Illuminate\Support\Facades\DB::getQueryLog();
+        \Illuminate\Support\Facades\DB::disableQueryLog();
 
+        fwrite(STDERR, "DEBUG-VALIDATE-QUERIES: ".json_encode(array_slice($queries, -6))."\n");
         fwrite(STDERR, "DEBUG-VALIDATE-BODY: ".$response->getContent()."\n");
-        fwrite(STDERR, "DEBUG-VALIDATE-DB: ".json_encode(\App\Models\Payroll::find($payroll->id)?->toArray())."\n");
 
         $response->assertStatus(200)
             ->assertJsonPath('data.status', 'validated');

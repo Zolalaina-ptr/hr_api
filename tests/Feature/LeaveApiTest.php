@@ -500,6 +500,8 @@ class LeaveApiTest extends TestCase
 
         $response = $this->getJson("/api/leaves/{$leave->id}");
 
+        fwrite(STDERR, "DEBUG-SHOW-BODY: ".$response->getContent()."\n");
+
         $response->assertStatus(200)
             ->assertJsonPath('data.id', $leave->id)
             ->assertJsonPath('data.employee.id', $this->employee->id)

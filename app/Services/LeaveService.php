@@ -343,8 +343,8 @@ class LeaveService
             ->selectRaw('
                 COUNT(*) as total_requests,
                 SUM(duration_days) as total_days,
-                SUM(CASE WHEN status = "approved" THEN duration_days ELSE 0 END) as approved_days,
-                SUM(CASE WHEN status = "pending" THEN 1 ELSE 0 END) as pending_count
+                SUM(CASE WHEN status = 'approved' THEN duration_days ELSE 0 END) as approved_days,
+                SUM(CASE WHEN status = 'pending' THEN 1 ELSE 0 END) as pending_count
             ')
             ->first();
 
