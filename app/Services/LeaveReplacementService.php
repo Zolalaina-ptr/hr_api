@@ -62,11 +62,18 @@ class LeaveReplacementService
         $previousStatus = $replacement->status;
         $this->assertTransitionAllowed($replacement, 'accepted');
 
+        if ($this->hasOtherAcceptedReplacement($replacement)) {
+            throw new BusinessRuleException('An accepted replacement already exists for this leave');
+        }
+
         $replacement->update([
             'status' => 'accepted',
             'approved_by' => auth()->id(),
             'approved_at' => now(),
         ]);
+
+        // Keep the legacy leave column in sync with the accepted replacement
+        $replacement->leave->update(['replacement_employee_id' => $replacement->replacement_employee_id]);
 
         return $this->dispatchStatusChanged($replacement, $previousStatus);
     }
@@ -95,6 +102,11 @@ class LeaveReplacementService
             'status' => 'cancelled',
         ]);
 
+        // A cancelled accepted replacement releases the legacy leave column
+        if ($previousStatus === 'accepted') {
+            $replacement->leave->update(['replacement_employee_id' => null]);
+        }
+
         return $this->dispatchStatusChanged($replacement, $previousStatus);
     }
 
@@ -114,5 +126,14 @@ class LeaveReplacementService
         if (! in_array($target, $allowed, true)) {
             throw new BusinessRuleException("A {$replacement->status} replacement cannot be {$target}");
         }
+    }
+
+    private function hasOtherAcceptedReplacement(LeaveReplacement $replacement): bool
+    {
+        return LeaveReplacement::query()
+            ->where('leave_id', $replacement->leave_id)
+            ->where('status', 'accepted')
+            ->whereKeyNot($replacement->getKey())
+            ->exists();
     }
 }

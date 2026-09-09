@@ -70,6 +70,13 @@ Machine à états : `pending → accepted | declined | cancelled`,
 transitions invalides renvoient une erreur métier HTTP 422
 (`BusinessRuleException`).
 
+Cohérence avec le congé : à l'acceptation, `leaves.replacement_employee_id`
+est synchronisé avec le remplaçant accepté (et remis à `null` si ce
+remplacement est ensuite annulé). Une seule acceptation est possible par
+congé — accepter un second remplacement tant qu'un autre est `accepted`
+renvoie également une erreur métier 422. `GET /api/leaves/{leave}` expose la
+collection `replacements` du congé.
+
 Notifications automatiques (module `notifications`) : demande → utilisateur
 lié à l'employé remplaçant ; acceptation/refus → demandeur ; annulation →
 remplaçant. Aucune notification n'est émise si l'employé n'a pas d'utilisateur
