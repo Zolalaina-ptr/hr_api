@@ -5,6 +5,7 @@ use App\Http\Controllers\Api\AuthController;
 use App\Http\Controllers\Api\DepartmentController;
 use App\Http\Controllers\Api\EmployeeController;
 use App\Http\Controllers\Api\LeaveController;
+use App\Http\Controllers\Api\LeaveReplacementController;
 use App\Http\Controllers\Api\PositionController;
 use Illuminate\Support\Facades\Route;
 
@@ -194,5 +195,24 @@ Route::middleware(['auth:sanctum', 'throttle:api'])->group(function () {
 
     Route::middleware('permission:delete leaves|manage leaves')->group(function () {
         Route::delete('/leaves/{leave}', [LeaveController::class, 'destroy']);
+    });
+
+    // Phase 6: Leave replacements routes
+    Route::middleware('permission:view leaves|manage leaves')->group(function () {
+        Route::get('/leaves/{leave}/replacements', [LeaveReplacementController::class, 'index']);
+        Route::get('/replacements/{replacement}', [LeaveReplacementController::class, 'show']);
+    });
+
+    Route::middleware('permission:create leaves|manage leaves')->group(function () {
+        Route::post('/leaves/{leave}/replacements', [LeaveReplacementController::class, 'store']);
+    });
+
+    Route::middleware('permission:update leaves|manage leaves')->group(function () {
+        Route::patch('/replacements/{replacement}/accept', [LeaveReplacementController::class, 'accept']);
+        Route::patch('/replacements/{replacement}/decline', [LeaveReplacementController::class, 'decline']);
+    });
+
+    Route::middleware('permission:delete leaves|manage leaves')->group(function () {
+        Route::delete('/replacements/{replacement}', [LeaveReplacementController::class, 'destroy']);
     });
 });
