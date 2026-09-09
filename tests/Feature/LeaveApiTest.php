@@ -5,6 +5,7 @@ namespace Tests\Feature;
 use App\Models\Employee;
 use App\Models\Leave;
 use App\Models\LeaveBalance;
+use App\Models\LeaveReplacement;
 use App\Models\LeaveType;
 use App\Models\Permission;
 use App\Models\User;
@@ -505,6 +506,32 @@ class LeaveApiTest extends TestCase
             ->assertJsonPath('data.employee.id', $this->employee->id)
             // Laravel 13 serializes relation keys in snake_case
             ->assertJsonPath('data.leave_type.code', $type->code);
+    }
+
+    public function test_show_leave_includes_replacements(): void
+    {
+        $type = $this->makeType();
+        $leave = $this->createLeave($this->employee, $type);
+        $replacementEmployee = Employee::factory()->create();
+
+        LeaveReplacement::create([
+            'leave_id' => $leave->id,
+            'original_employee_id' => $this->employee->id,
+            'replacement_employee_id' => $replacementEmployee->id,
+            'start_date' => $leave->start_date->toDateString(),
+            'end_date' => $leave->end_date->toDateString(),
+            'status' => 'pending',
+        ]);
+
+        Sanctum::actingAs($this->adminUser);
+
+        $response = $this->getJson("/api/leaves/{$leave->id}");
+
+        $response->assertStatus(200)
+            ->assertJsonPath('data.replacements.0.replacement_employee_id', $replacementEmployee->id)
+            ->assertJsonPath('data.replacements.0.status', 'pending');
+
+        $this->assertCount(1, $response->json('data.replacements'));
     }
 
     // -----------------------------------------------------------------

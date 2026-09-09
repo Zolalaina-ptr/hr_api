@@ -47,7 +47,7 @@ class LeaveController
 
     public function show(Leave $leave): JsonResponse
     {
-        $leave->load(['employee', 'leaveType', 'replacement', 'approver', 'histories']);
+        $leave->load(['employee', 'leaveType', 'replacement', 'replacements', 'approver', 'histories']);
 
         return $this->success($leave, 'Leave retrieved successfully');
     }
