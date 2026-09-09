@@ -23,6 +23,11 @@ class NoLeaveOverlap implements Rule
         return ! $this->hasOverlappingLeave();
     }
 
+    public function message(): string
+    {
+        return 'These dates overlap with an existing pending or approved leave.';
+    }
+
     public function fails($attribute, $value)
     {
         return $this->hasOverlappingLeave();

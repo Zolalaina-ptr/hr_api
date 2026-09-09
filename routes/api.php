@@ -3,7 +3,9 @@
 use App\Http\Controllers\Api\AttendanceController;
 use App\Http\Controllers\Api\AuthController;
 use App\Http\Controllers\Api\DepartmentController;
+use App\Http\Controllers\Api\EmployeeController;
 use App\Http\Controllers\Api\LeaveController;
+use App\Http\Controllers\Api\LeaveReplacementController;
 use App\Http\Controllers\Api\PositionController;
 use Illuminate\Support\Facades\Route;
 
@@ -81,6 +83,25 @@ Route::middleware(['auth:sanctum', 'throttle:api'])->group(function () {
 
     Route::middleware('permission:delete positions')->group(function () {
         Route::delete('/positions/{position}', [PositionController::class, 'destroy']);
+    });
+
+    // Phase 11: Employees routes
+    Route::middleware('permission:view employees')->group(function () {
+        Route::get('/employees', [EmployeeController::class, 'index']);
+        Route::get('/employees/{employee}', [EmployeeController::class, 'show']);
+        Route::get('/employees/{employee}/history', [EmployeeController::class, 'history']);
+    });
+
+    Route::middleware('permission:create employees')->group(function () {
+        Route::post('/employees', [EmployeeController::class, 'store']);
+    });
+
+    Route::middleware('permission:update employees')->group(function () {
+        Route::put('/employees/{employee}', [EmployeeController::class, 'update']);
+    });
+
+    Route::middleware('permission:delete employees')->group(function () {
+        Route::delete('/employees/{employee}', [EmployeeController::class, 'destroy']);
     });
 
     // Phase 5: Attendance routes
@@ -174,5 +195,24 @@ Route::middleware(['auth:sanctum', 'throttle:api'])->group(function () {
 
     Route::middleware('permission:delete leaves|manage leaves')->group(function () {
         Route::delete('/leaves/{leave}', [LeaveController::class, 'destroy']);
+    });
+
+    // Phase 6: Leave replacements routes
+    Route::middleware('permission:view leaves|manage leaves')->group(function () {
+        Route::get('/leaves/{leave}/replacements', [LeaveReplacementController::class, 'index']);
+        Route::get('/replacements/{replacement}', [LeaveReplacementController::class, 'show']);
+    });
+
+    Route::middleware('permission:create leaves|manage leaves')->group(function () {
+        Route::post('/leaves/{leave}/replacements', [LeaveReplacementController::class, 'store']);
+    });
+
+    Route::middleware('permission:update leaves|manage leaves')->group(function () {
+        Route::patch('/replacements/{replacement}/accept', [LeaveReplacementController::class, 'accept']);
+        Route::patch('/replacements/{replacement}/decline', [LeaveReplacementController::class, 'decline']);
+    });
+
+    Route::middleware('permission:delete leaves|manage leaves')->group(function () {
+        Route::delete('/replacements/{replacement}', [LeaveReplacementController::class, 'destroy']);
     });
 });
