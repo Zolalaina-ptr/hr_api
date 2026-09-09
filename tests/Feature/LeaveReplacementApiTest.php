@@ -503,6 +503,93 @@ class LeaveReplacementApiTest extends TestCase
     }
 
     // -----------------------------------------------------------------
+    // Leave synchronization
+    // -----------------------------------------------------------------
+
+    public function test_accepting_replacement_sets_leave_replacement_employee(): void
+    {
+        $leave = $this->createLeave();
+        $replacementEmployee = Employee::factory()->create();
+        $replacement = $this->createReplacement($leave, $replacementEmployee);
+
+        $this->assertDatabaseHas('leaves', [
+            'id' => $leave->id,
+            'replacement_employee_id' => null,
+        ]);
+
+        Sanctum::actingAs($this->adminUser);
+
+        $this->patchJson("/api/replacements/{$replacement->id}/accept")
+            ->assertOk()
+            ->assertJsonPath('data.status', 'accepted');
+
+        $this->assertDatabaseHas('leaves', [
+            'id' => $leave->id,
+            'replacement_employee_id' => $replacementEmployee->id,
+        ]);
+    }
+
+    public function test_cancelling_accepted_replacement_clears_leave_replacement_employee(): void
+    {
+        $leave = $this->createLeave();
+        $replacementEmployee = Employee::factory()->create();
+        $replacement = $this->createReplacement($leave, $replacementEmployee);
+
+        Sanctum::actingAs($this->adminUser);
+
+        $this->patchJson("/api/replacements/{$replacement->id}/accept")->assertOk();
+        $this->deleteJson("/api/replacements/{$replacement->id}")->assertOk();
+
+        $this->assertDatabaseHas('leaves', [
+            'id' => $leave->id,
+            'replacement_employee_id' => null,
+        ]);
+    }
+
+    public function test_accept_rejects_when_another_replacement_is_already_accepted(): void
+    {
+        $leave = $this->createLeave();
+        $this->createReplacement($leave, null, ['status' => 'accepted']);
+
+        // Created before the first one was accepted, still pending
+        $pending = $this->createReplacement($leave);
+
+        Sanctum::actingAs($this->adminUser);
+
+        $this->patchJson("/api/replacements/{$pending->id}/accept")
+            ->assertStatus(422)
+            ->assertJson(['success' => false]);
+
+        $this->assertDatabaseHas('leave_replacements', [
+            'id' => $pending->id,
+            'status' => 'pending',
+        ]);
+
+        $this->assertDatabaseHas('leaves', [
+            'id' => $leave->id,
+            'replacement_employee_id' => null,
+        ]);
+    }
+
+    public function test_declining_replacement_does_not_change_leave_replacement_employee(): void
+    {
+        $leave = $this->createLeave();
+        $replacementEmployee = Employee::factory()->create();
+        $replacement = $this->createReplacement($leave, $replacementEmployee);
+
+        Sanctum::actingAs($this->adminUser);
+
+        $this->patchJson("/api/replacements/{$replacement->id}/decline", [
+            'reason' => 'Not available',
+        ])->assertOk();
+
+        $this->assertDatabaseHas('leaves', [
+            'id' => $leave->id,
+            'replacement_employee_id' => null,
+        ]);
+    }
+
+    // -----------------------------------------------------------------
     // Notifications
     // -----------------------------------------------------------------
 
